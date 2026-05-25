@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SportShoes2026.Data/SportShoes2026.Data.csproj" />
+  <Project Path="SportShoes2026.Entities/SportShoes2026.Entities.csproj" />
+  <Project Path="SportShoes2026.IoC/SportShoes2026.IoC.csproj" />
+  <Project Path="SportShoes2026.Service/SportShoes2026.Service.csproj" />
+</Solution>
