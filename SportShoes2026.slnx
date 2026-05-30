@@ -3,4 +3,5 @@
   <Project Path="SportShoes2026.Entities/SportShoes2026.Entities.csproj" />
   <Project Path="SportShoes2026.IoC/SportShoes2026.IoC.csproj" />
   <Project Path="SportShoes2026.Service/SportShoes2026.Service.csproj" />
+  <Project Path="SportShoes2026.Windows/SportShoes2026.Windows.csproj" Id="c4b1e2e5-e005-492a-80d9-93339043e19d" />
 </Solution>

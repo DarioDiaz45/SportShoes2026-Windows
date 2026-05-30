@@ -7,14 +7,14 @@ using SportShoes2026.Entities;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Service.Services;
 using SportShoes2026.Service.Validator;
+using System.Diagnostics;
 
 namespace SportShoes2026.IoC
 {
     public static class DependencyInjectionContainer
     {
-        public static IServiceProvider Configure()
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            var services = new ServiceCollection();
 
 
 
@@ -56,7 +56,7 @@ namespace SportShoes2026.IoC
 
             services.AddScoped<IValidator<SportShoe>, SportShoeValidator>();
 
-            return services.BuildServiceProvider();
+            return services;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SportShoes2026.Data.Interfaces;
+﻿using SportShoes2026.Data.Interfaces;
 using SportShoes2026.Entities;
 
 namespace SportShoes2026.Data.Repositories
