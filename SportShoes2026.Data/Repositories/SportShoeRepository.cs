@@ -4,30 +4,10 @@ using SportShoes2026.Entities;
 
 namespace SportShoes2026.Data.Repositories
 {
-    public class SportShoeRepository : ISportShoeRepository
+    public class SportShoeRepository : RepositoryGeneric<SportShoe>, ISportShoeRepository
     {
-        private readonly ShoesDbContext
-           _context;
-
-        public SportShoeRepository(ShoesDbContext context)
+        public SportShoeRepository(ShoesDbContext context) : base(context)
         {
-            _context = context;
-        }
-
-        public void Add(SportShoe shoe)
-        {
-            _context.SportShoes.Add(shoe);
-        }
-
-        public void Delete(int id)
-        {
-            var shoe =
-                _context.SportShoes.Find(id);
-
-            if (shoe != null)
-            {
-                shoe.Active = false;
-            }
         }
 
         public bool ExistSameSportShoe(
@@ -44,37 +24,19 @@ namespace SportShoes2026.Data.Repositories
                  s.ShoeId != sportShoeId));
         }
 
-        public List<SportShoe> GetAll()
-        {
-            return _context.SportShoes
-            .Include(s => s.Brand)
-            .Include(s => s.Genre)
-            .Include(s => s.Sport)
-            .Include(s => s.Size)
-            .Where(s => s.Active)
-            .AsNoTracking()
-            .ToList();
-        }
 
         public List<SportShoe> GetByBrand(int brandId)
         {
-                return _context.SportShoes.Include(s => s.Brand)
-                    .Include(s => s.Size)
-                    .Include(s => s.Sport)
-                    .Include(s => s.Genre)
-                    .Where(s =>s.BrandId == brandId &&s.Active)
-                    .AsNoTracking()
-                    .ToList();
+            return _context.SportShoes.Include(s => s.Brand)
+                .Include(s => s.Size)
+                .Include(s => s.Sport)
+                .Include(s => s.Genre)
+                .Where(s => s.BrandId == brandId && s.Active)
+                .AsNoTracking()
+                .ToList();
         }
 
-        public SportShoe? GetById(int id)
-        {
-            return _context.SportShoes
-                .Include(s => s.Brand)
-                .Include(s => s.Genre)
-                .Include(s => s.Sport)
-                .FirstOrDefault(s => s.ShoeId == id);
-        }
+
 
         public List<SportShoe> GetBySize(int sizeId)
         {
@@ -82,7 +44,7 @@ namespace SportShoes2026.Data.Repositories
                 .Include(s => s.Size)
                 .Include(s => s.Sport)
                 .Include(s => s.Genre)
-                .Where(s =>s.SizeId == sizeId &&s.Active)
+                .Where(s => s.SizeId == sizeId && s.Active)
                 .AsNoTracking()
                 .ToList();
 
@@ -94,7 +56,7 @@ namespace SportShoes2026.Data.Repositories
                 .Include(s => s.Size)
                 .Include(s => s.Sport)
                 .Include(s => s.Genre)
-                .Where(s => s.SportId == sportId &&s.Active)
+                .Where(s => s.SportId == sportId && s.Active)
                 .AsNoTracking()
                 .ToList();
         }
@@ -135,19 +97,7 @@ namespace SportShoes2026.Data.Repositories
                     .ToList();
         }
 
-        public IQueryable<SportShoe> Query()
-        {
-            return _context.SportShoes
-                .Include(s => s.Brand)
-                .Include(s => s.Genre)
-                .Include(s => s.Sport)
-                .AsNoTracking()
-                .AsQueryable();
-        }
 
-        public void Update(SportShoe shoe)
-        {
-            _context.SportShoes.Update(shoe);
-        }
+
     }
 }

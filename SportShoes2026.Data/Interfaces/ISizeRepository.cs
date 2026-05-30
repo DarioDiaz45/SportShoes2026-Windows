@@ -3,16 +3,8 @@ using System.Drawing;
 
 namespace SportShoes2026.Data.Interfaces
 {
-    public interface ISizeRepository
+    public interface ISizeRepository:IRepositoryGeneric<SiZe>
     {
-        List<SiZe> GetAll();
-
-        SiZe? GetById(int id);
-
-        IQueryable<SiZe> Query();
-
-        void Update(SiZe size);
-
         bool ExistSameNumber(decimal number, int? sizeId = null);
     }
 }

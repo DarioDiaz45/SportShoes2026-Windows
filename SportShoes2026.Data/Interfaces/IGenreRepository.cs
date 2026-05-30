@@ -2,8 +2,7 @@
 
 namespace SportShoes2026.Data.Interfaces
 {
-    public interface IGenreRepository
+    public interface IGenreRepository:IRepositoryGeneric<Genre>
     {
-        IEnumerable<Genre> GetAll();
     }
 }

@@ -4,18 +4,10 @@ using SportShoes2026.Entities;
 
 namespace SportShoes2026.Data.Repositories
 {
-    public class GenreRepository : IGenreRepository
+    public class GenreRepository : RepositoryGeneric<Genre>, IGenreRepository
     {
-        private readonly ShoesDbContext _context;
-
-        public GenreRepository(ShoesDbContext context)
+        public GenreRepository(ShoesDbContext context) : base(context)
         {
-            _context = context;
-        }
-
-        public IEnumerable<Genre> GetAll()
-        {
-            return _context.Genres.AsNoTracking().ToList();
         }
     }
 }

@@ -5,12 +5,10 @@ using SportShoes2026.Entities;
 
 namespace SportShoes2026.Data.Repositories
 {
-    public class SizeRepository : ISizeRepository
+    public class SizeRepository :RepositoryGeneric<SiZe>, ISizeRepository
     {
-        private readonly ShoesDbContext _context;
-        public SizeRepository(ShoesDbContext context)
+        public SizeRepository(ShoesDbContext context) : base(context)
         {
-            _context = context;
         }
 
         public bool ExistSameNumber(decimal number, int? sizeId = null)
@@ -21,29 +19,5 @@ namespace SportShoes2026.Data.Repositories
                  s.SizeId != sizeId));
         }
 
-        public List<SiZe> GetAll()
-        {
-            return _context.SiZes
-               .Where(s => s.Active)
-               .AsNoTracking()
-               .ToList();
-        }
-
-        public SiZe? GetById(int id)
-        {
-            return _context.SiZes.Find(id);
-        }
-
-        public IQueryable<SiZe> Query()
-        {
-            return _context.SiZes
-               .AsNoTracking()
-               .AsQueryable();
-        }
-
-        public void Update(SiZe size)
-        {
-            _context.SiZes.Update(size);
-        }
     }
 }

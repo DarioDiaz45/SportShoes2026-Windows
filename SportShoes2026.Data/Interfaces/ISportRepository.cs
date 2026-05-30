@@ -2,20 +2,8 @@
 
 namespace SportShoes2026.Data.Interfaces
 {
-    public interface ISportRepository
+    public interface ISportRepository:IRepositoryGeneric<Sport>
     {
-        List<Sport> GetAll();
-
-        Sport? GetById(int id);
-
-        IQueryable<Sport> Query();
-
-        void Add(Sport sport);
-
-        void Update(Sport sport);
-
-        void Delete(int id);
-
         bool ExistSameName(string name, int? sportId = null);
 
         bool HasSportShoes(int id);
