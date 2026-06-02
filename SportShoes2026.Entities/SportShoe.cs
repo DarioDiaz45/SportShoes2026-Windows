@@ -1,6 +1,8 @@
-﻿namespace SportShoes2026.Entities
+﻿using SportShoes2026.Entities.Interface;
+
+namespace SportShoes2026.Entities
 {
-    public class SportShoe
+    public class SportShoe:IConcurrencyEntity
     {
         public int ShoeId { get; set; }
 
