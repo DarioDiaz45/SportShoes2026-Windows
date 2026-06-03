@@ -99,9 +99,6 @@ namespace SportShoes2026.Windows
         {
             filtroActivo = v;
             tsbFilter.BackColor = v ? Color.Orange : SystemColors.Control;
-
-            tsbNew.Enabled = !v;
-            tsbDelete.Enabled = !v;
             tsbEdit.Enabled = !v;
         }
 

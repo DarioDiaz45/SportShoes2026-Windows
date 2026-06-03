@@ -1,5 +1,6 @@
 ﻿using SportShoes2026.Entities;
 using SportShoes2026.Service.DTOs.Brand;
+using System.Drawing;
 
 namespace SportShoes2026.Service.Mappers
 {
@@ -18,7 +19,8 @@ namespace SportShoes2026.Service.Mappers
             return new BrandListDto
             {
                 BrandId = brand.BrandId,
-                BrandName = brand.BrandName
+                BrandName = brand.BrandName,
+                IsActive = brand.Active
             };
         }
 

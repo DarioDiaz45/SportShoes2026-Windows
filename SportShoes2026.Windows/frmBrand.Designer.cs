@@ -1,6 +1,6 @@
 ﻿namespace SportShoes2026.Windows
 {
-    partial class frmSize
+    partial class frmBrand
     {
         /// <summary>
         /// Required designer variable.
@@ -28,27 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSize));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBrand));
             pnlCrud = new Panel();
             toolStrip1 = new ToolStrip();
+            tsbNew = new ToolStripButton();
+            tsbDelete = new ToolStripButton();
             tsbEdit = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
-            tsbFilter = new ToolStripDropDownButton();
-            activeToolStripMenuItem = new ToolStripMenuItem();
-            noActiveToolStripMenuItem = new ToolStripMenuItem();
+            tsbFilter = new ToolStripButton();
             tsbUpdate = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
             tsbClose = new ToolStripButton();
             pnlCantidad = new Panel();
             lblCantidad = new Label();
             label1 = new Label();
+            pnlGrid = new Panel();
             dgvDatos = new DataGridView();
-            colIdSize = new DataGridViewTextBoxColumn();
-            colNumber = new DataGridViewTextBoxColumn();
+            colBrandId = new DataGridViewTextBoxColumn();
+            ColBrandName = new DataGridViewTextBoxColumn();
             colActive = new DataGridViewCheckBoxColumn();
             pnlCrud.SuspendLayout();
             toolStrip1.SuspendLayout();
             pnlCantidad.SuspendLayout();
+            pnlGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
             SuspendLayout();
             // 
@@ -58,17 +60,37 @@
             pnlCrud.Dock = DockStyle.Top;
             pnlCrud.Location = new Point(0, 0);
             pnlCrud.Name = "pnlCrud";
-            pnlCrud.Size = new Size(800, 77);
+            pnlCrud.Size = new Size(799, 71);
             pnlCrud.TabIndex = 0;
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { tsbEdit, toolStripSeparator1, tsbFilter, tsbUpdate, toolStripSeparator2, tsbClose });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { tsbNew, tsbDelete, tsbEdit, toolStripSeparator1, tsbFilter, tsbUpdate, toolStripSeparator2, tsbClose });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(800, 70);
+            toolStrip1.Size = new Size(799, 70);
             toolStrip1.TabIndex = 0;
             toolStrip1.Text = "toolStrip1";
+            // 
+            // tsbNew
+            // 
+            tsbNew.Image = (Image)resources.GetObject("tsbNew.Image");
+            tsbNew.ImageScaling = ToolStripItemImageScaling.None;
+            tsbNew.ImageTransparentColor = Color.Magenta;
+            tsbNew.Name = "tsbNew";
+            tsbNew.Size = new Size(52, 67);
+            tsbNew.Text = "New";
+            tsbNew.TextImageRelation = TextImageRelation.ImageAboveText;
+            // 
+            // tsbDelete
+            // 
+            tsbDelete.Image = (Image)resources.GetObject("tsbDelete.Image");
+            tsbDelete.ImageScaling = ToolStripItemImageScaling.None;
+            tsbDelete.ImageTransparentColor = Color.Magenta;
+            tsbDelete.Name = "tsbDelete";
+            tsbDelete.Size = new Size(52, 67);
+            tsbDelete.Text = "Delete";
+            tsbDelete.TextImageRelation = TextImageRelation.ImageAboveText;
             // 
             // tsbEdit
             // 
@@ -87,28 +109,13 @@
             // 
             // tsbFilter
             // 
-            tsbFilter.DropDownItems.AddRange(new ToolStripItem[] { activeToolStripMenuItem, noActiveToolStripMenuItem });
             tsbFilter.Image = (Image)resources.GetObject("tsbFilter.Image");
             tsbFilter.ImageScaling = ToolStripItemImageScaling.None;
             tsbFilter.ImageTransparentColor = Color.Magenta;
             tsbFilter.Name = "tsbFilter";
-            tsbFilter.Size = new Size(61, 67);
+            tsbFilter.Size = new Size(52, 67);
             tsbFilter.Text = "Filter";
             tsbFilter.TextImageRelation = TextImageRelation.ImageAboveText;
-            // 
-            // activeToolStripMenuItem
-            // 
-            activeToolStripMenuItem.Name = "activeToolStripMenuItem";
-            activeToolStripMenuItem.Size = new Size(123, 22);
-            activeToolStripMenuItem.Text = "Active";
-            activeToolStripMenuItem.Click += activeToolStripMenuItem_Click;
-            // 
-            // noActiveToolStripMenuItem
-            // 
-            noActiveToolStripMenuItem.Name = "noActiveToolStripMenuItem";
-            noActiveToolStripMenuItem.Size = new Size(123, 22);
-            noActiveToolStripMenuItem.Text = "NoActive";
-            noActiveToolStripMenuItem.Click += noActiveToolStripMenuItem_Click;
             // 
             // tsbUpdate
             // 
@@ -119,7 +126,6 @@
             tsbUpdate.Size = new Size(52, 67);
             tsbUpdate.Text = "Update";
             tsbUpdate.TextImageRelation = TextImageRelation.ImageAboveText;
-            tsbUpdate.Click += tsbUpdate_Click;
             // 
             // toolStripSeparator2
             // 
@@ -142,15 +148,15 @@
             pnlCantidad.Controls.Add(lblCantidad);
             pnlCantidad.Controls.Add(label1);
             pnlCantidad.Dock = DockStyle.Bottom;
-            pnlCantidad.Location = new Point(0, 424);
+            pnlCantidad.Location = new Point(0, 400);
             pnlCantidad.Name = "pnlCantidad";
-            pnlCantidad.Size = new Size(800, 36);
+            pnlCantidad.Size = new Size(799, 50);
             pnlCantidad.TabIndex = 1;
             // 
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.Location = new Point(73, 12);
+            lblCantidad.Location = new Point(76, 16);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(13, 15);
             lblCantidad.TabIndex = 1;
@@ -159,56 +165,66 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 12);
+            label1.Location = new Point(12, 16);
             label1.Name = "label1";
             label1.Size = new Size(58, 15);
             label1.TabIndex = 0;
             label1.Text = "Cantidad:";
             // 
+            // pnlGrid
+            // 
+            pnlGrid.Controls.Add(dgvDatos);
+            pnlGrid.Dock = DockStyle.Fill;
+            pnlGrid.Location = new Point(0, 71);
+            pnlGrid.Name = "pnlGrid";
+            pnlGrid.Size = new Size(799, 329);
+            pnlGrid.TabIndex = 2;
+            // 
             // dgvDatos
             // 
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colIdSize, colNumber, colActive });
+            dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colBrandId, ColBrandName, colActive });
             dgvDatos.Dock = DockStyle.Fill;
-            dgvDatos.Location = new Point(0, 77);
+            dgvDatos.Location = new Point(0, 0);
             dgvDatos.Name = "dgvDatos";
-            dgvDatos.Size = new Size(800, 347);
-            dgvDatos.TabIndex = 2;
+            dgvDatos.Size = new Size(799, 329);
+            dgvDatos.TabIndex = 0;
             // 
-            // colIdSize
+            // colBrandId
             // 
-            colIdSize.HeaderText = "Id";
-            colIdSize.Name = "colIdSize";
-            colIdSize.Visible = false;
+            colBrandId.HeaderText = "Id";
+            colBrandId.Name = "colBrandId";
+            colBrandId.Visible = false;
             // 
-            // colNumber
+            // ColBrandName
             // 
-            colNumber.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colNumber.HeaderText = "Number";
-            colNumber.Name = "colNumber";
+            ColBrandName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            ColBrandName.HeaderText = "Name";
+            ColBrandName.Name = "ColBrandName";
             // 
             // colActive
             // 
             colActive.HeaderText = "Active";
             colActive.Name = "colActive";
             // 
-            // frmSize
+            // frmBrand
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 460);
-            Controls.Add(dgvDatos);
+            ClientSize = new Size(799, 450);
+            Controls.Add(pnlGrid);
             Controls.Add(pnlCantidad);
             Controls.Add(pnlCrud);
-            Name = "frmSize";
-            Text = "frmSize";
-            Load += frmSize_Load;
+            Name = "frmBrand";
+            Text = "frmBrand";
+            Load += frmBrand_Load;
             pnlCrud.ResumeLayout(false);
             pnlCrud.PerformLayout();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
             pnlCantidad.ResumeLayout(false);
             pnlCantidad.PerformLayout();
+            pnlGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvDatos).EndInit();
             ResumeLayout(false);
         }
@@ -216,21 +232,22 @@
         #endregion
 
         private Panel pnlCrud;
-        private Panel pnlCantidad;
         private ToolStrip toolStrip1;
+        private ToolStripButton tsbNew;
+        private ToolStripButton tsbDelete;
         private ToolStripButton tsbEdit;
         private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton tsbFilter;
         private ToolStripButton tsbUpdate;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton tsbClose;
+        private Panel pnlCantidad;
+        private Panel pnlGrid;
         private Label lblCantidad;
         private Label label1;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colIdSize;
-        private DataGridViewTextBoxColumn colNumber;
+        private DataGridViewTextBoxColumn colBrandId;
+        private DataGridViewTextBoxColumn ColBrandName;
         private DataGridViewCheckBoxColumn colActive;
-        private ToolStripDropDownButton tsbFilter;
-        private ToolStripMenuItem activeToolStripMenuItem;
-        private ToolStripMenuItem noActiveToolStripMenuItem;
     }
 }

@@ -115,6 +115,7 @@
             btnBrand.TabIndex = 0;
             btnBrand.Text = "Brand";
             btnBrand.UseVisualStyleBackColor = true;
+            btnBrand.Click += btnBrand_Click;
             // 
             // btnSport
             // 

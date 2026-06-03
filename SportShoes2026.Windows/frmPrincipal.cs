@@ -44,5 +44,14 @@ namespace SportShoes2026.Windows
                 frm.ShowDialog();
             }
         }
+
+        private void btnBrand_Click(object sender, EventArgs e)
+        {
+            using (var frm = _serviceProvider.GetRequiredService<frmBrand>())
+            {
+                frm.Text = "Brands  List";
+                frm.ShowDialog();
+            }
+        }
     }
 }
