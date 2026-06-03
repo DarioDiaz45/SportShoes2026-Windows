@@ -1,4 +1,5 @@
-﻿using SportShoes2026.Data.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SportShoes2026.Data.Interfaces;
 using SportShoes2026.Entities;
 
 namespace SportShoes2026.Data
@@ -27,6 +28,30 @@ namespace SportShoes2026.Data
         public ISportShoeRepository SportShoes { get; }
         public IGenreRepository Genres { get; }
 
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+
+        public void RollBack()
+        {
+            foreach (var item in _context.ChangeTracker.Entries())
+            {
+                switch (item.State)
+                {
+                    case EntityState.Modified:
+                        item.State=EntityState.Unchanged;
+                        item.CurrentValues.SetValues(item.OriginalValues);
+                        break;
+                    case EntityState.Added:
+                        item.State = EntityState.Detached;
+                        break;
+                    case EntityState.Deleted:
+                        item.State = EntityState.Unchanged;
+                        break;
+                }
+            }
+        }
 
         public void Save()
         {

@@ -4,7 +4,7 @@ using SportShoes2026.Data.Interfaces;
 
 namespace SportShoes2026.Data
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork:IDisposable
     {
         IBrandRepository Brands { get; }
 
@@ -17,5 +17,6 @@ namespace SportShoes2026.Data
         IGenreRepository Genres { get; }
 
         void Save();
+        void RollBack();
     }
 }

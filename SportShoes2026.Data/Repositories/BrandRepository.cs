@@ -3,7 +3,7 @@ using SportShoes2026.Entities;
 
 namespace SportShoes2026.Data.Repositories
 {
-    public class BrandRepository : RepositoryGeneric<Brand>, IBrandRepository
+    public class BrandRepository : RepositoryConcurrent<Brand>, IBrandRepository
     {
         public BrandRepository(ShoesDbContext context) : base(context)
         {

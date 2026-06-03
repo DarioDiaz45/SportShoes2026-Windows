@@ -125,6 +125,7 @@
             btnSport.TabIndex = 0;
             btnSport.Text = "Sport";
             btnSport.UseVisualStyleBackColor = true;
+            btnSport.Click += btnSport_Click;
             // 
             // btnSize
             // 
@@ -145,6 +146,7 @@
             btnShoes.TabIndex = 0;
             btnShoes.Text = "Shoes";
             btnShoes.UseVisualStyleBackColor = true;
+            btnShoes.Click += btnShoes_Click;
             // 
             // pnlUsuario
             // 
@@ -197,6 +199,7 @@
             btnLogout.TabIndex = 3;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
             // 
             // lblFechaTime
             // 
@@ -236,6 +239,7 @@
             Controls.Add(pnlPrincipal);
             Name = "frmPrincipal";
             Text = "frmPrincipal";
+            Load += frmPrincipal_Load;
             pnlPrincipal.ResumeLayout(false);
             pnlMensaje.ResumeLayout(false);
             pnlMensaje.PerformLayout();

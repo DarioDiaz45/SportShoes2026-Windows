@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using SportShoes2026.Data;
 using SportShoes2026.Entities;
 using SportShoes2026.Service.Common;
 using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Service.Mappers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SportShoes2026.Service.Services
 {
@@ -60,33 +58,47 @@ namespace SportShoes2026.Service.Services
             }
         }
 
-        public Result Delete(int id)
+        public Result Delete(SportDeleteDto sportDeleteDto)
         {
-            var sport = _uow.Sports.GetById(id);
-
-            if (sport == null)
-            {
-                return Result.Failure(
-                    "Sport not found");
-            }
-
-            if (_uow.Sports.HasSportShoes(id))
-            {
-                return Result.Failure(
-                    "Sport has sport shoes");
-            }
-
             try
             {
-                _uow.Sports.Delete(id);
-
+                _uow.Sports.Delete(sportDeleteDto.SportId, sportDeleteDto.RowVersion);
                 _uow.Save();
-
                 return Result.Success();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                _uow.RollBack();
+                return Result.ConcurrencyFailure("Otro usuario modificó el registro\nLa grilla se recargará automáticamente");
+
+            }
+            catch (KeyNotFoundException)
+            {
+                _uow.RollBack();
+                return Result.Failure(@$"Sport con ID: {sportDeleteDto.SportId}not found");
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                _uow.RollBack();
+                return Result.Failure($"Error trying to delete a sport {ex.Message}");
+            }
+        }
+
+
+
+        public Result<List<SportListDto>> FilterByAsset(bool active)
+        {
+            try
+            {
+                var query = _uow.Sports.Query();
+                var lista = query.Where(s => s.Active == active);
+                var listaDto = lista.Select(s => SportMapper.ToListDto(s)).ToList();
+                return Result<List<SportListDto>>.Success(listaDto);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<List<SportListDto>>.Failure($"Error trying to filter Sport types: {ex.Message}");
             }
         }
 
@@ -101,8 +113,19 @@ namespace SportShoes2026.Service.Services
                 .Success(sports);
         }
 
-        public Result<SportUpdateDto>
-            GetForUpdate(int id)
+        public Result<SportDeleteDto> GetForDelete(int id)
+        {
+            var sport = _uow.Sports.GetById(id);
+
+            if (sport == null)
+            {
+                return Result<SportDeleteDto>.Failure("Sport not found");
+            }
+
+            return Result<SportDeleteDto>.Success(SportMapper.ToDeleteDto(sport));
+        }
+
+        public Result<SportUpdateDto> GetForUpdate(int id)
         {
             var sport = _uow.Sports.GetById(id);
 
@@ -112,9 +135,7 @@ namespace SportShoes2026.Service.Services
                     .Failure("Sport not found");
             }
 
-            return Result<SportUpdateDto>
-                .Success(
-                    SportMapper.ToUpdateDto(sport));
+            return Result<SportUpdateDto>.Success(SportMapper.ToUpdateDto(sport));
         }
 
         public Result Update(SportUpdateDto dto)

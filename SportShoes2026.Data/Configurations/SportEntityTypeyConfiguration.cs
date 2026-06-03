@@ -8,7 +8,9 @@ namespace SportShoes2026.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Sport> builder)
         {
-            builder.Property(b => b.SportName).IsRequired().HasMaxLength(50);
+            builder.HasKey(s => s.SportId);
+
+            builder.Property(b => b.SportName).IsRequired().HasMaxLength(20);
 
             builder.HasIndex(s => s.SportName).IsUnique();
 

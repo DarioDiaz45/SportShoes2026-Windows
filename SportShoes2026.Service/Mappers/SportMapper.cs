@@ -23,7 +23,8 @@ namespace SportShoes2026.Service.Mappers
             return new SportListDto
             {
                 SportId = sport.SportId,
-                SportName = sport.SportName
+                SportName = sport.SportName,
+                IsActive = sport.Active
             };
         }
 
@@ -34,6 +35,16 @@ namespace SportShoes2026.Service.Mappers
             {
                 SportId = sport.SportId,
                 SportName = sport.SportName
+            };
+        }
+
+        public static SportDeleteDto ToDeleteDto(
+            Sport sport)
+        {
+            return new SportDeleteDto
+            {
+                SportId = sport.SportId,
+                RowVersion = sport.RowVersion
             };
         }
     }

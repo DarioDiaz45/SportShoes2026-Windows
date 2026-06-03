@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLogin));
             btnLogin = new Button();
             btnSalir = new Button();
             lblUser = new Label();
@@ -41,21 +42,25 @@
             // 
             // btnLogin
             // 
+            btnLogin.Image = (Image)resources.GetObject("btnLogin.Image");
             btnLogin.Location = new Point(81, 165);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(91, 67);
             btnLogin.TabIndex = 2;
             btnLogin.Text = "Login";
+            btnLogin.TextImageRelation = TextImageRelation.ImageAboveText;
             btnLogin.UseVisualStyleBackColor = true;
             btnLogin.Click += btnLogin_Click;
             // 
             // btnSalir
             // 
+            btnSalir.Image = (Image)resources.GetObject("btnSalir.Image");
             btnSalir.Location = new Point(305, 165);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(91, 67);
             btnSalir.TabIndex = 3;
             btnSalir.Text = "Salir";
+            btnSalir.TextImageRelation = TextImageRelation.ImageAboveText;
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;
             // 
@@ -90,6 +95,7 @@
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(241, 23);
             txtPassword.TabIndex = 1;
+            txtPassword.UseSystemPasswordChar = true;
             // 
             // errorProvider1
             // 

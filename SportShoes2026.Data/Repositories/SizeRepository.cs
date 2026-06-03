@@ -4,7 +4,7 @@ using SportShoes2026.Entities;
 
 namespace SportShoes2026.Data.Repositories
 {
-    public class SizeRepository : RepositoryGeneric<SiZe>, ISizeRepository
+    public class SizeRepository : RepositoryConcurrent<SiZe>, ISizeRepository
     {
         public SizeRepository(ShoesDbContext context) : base(context)
         {

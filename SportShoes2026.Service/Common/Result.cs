@@ -5,13 +5,15 @@
         public bool IsSuccess { get; }
 
         public bool IsFailure => !IsSuccess;
+        public bool IsConcurrencyConflict { get; set; }
 
         public List<string> Errors { get; }
 
-        private Result(bool success, List<string> errors)
+        private Result(bool success, List<string> errors, bool isConcurrencyConflict=false)
         {
             IsSuccess = success;
             Errors = errors;
+            IsConcurrencyConflict = isConcurrencyConflict;
         }
 
         public static Result Success()
@@ -27,6 +29,11 @@
         public static Result Failure(List<string> errors)
         {
             return new Result(false, errors);
+        }
+
+        public static Result ConcurrencyFailure(string error)
+        {
+            return new Result(false, new List<string> { error }, true);
         }
     }
 }

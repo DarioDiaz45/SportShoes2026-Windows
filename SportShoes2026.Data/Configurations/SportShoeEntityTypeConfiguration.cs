@@ -8,7 +8,9 @@ namespace SportShoes2026.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<SportShoe> builder)
         {
-            builder.Property(s => s.Model).IsRequired().HasMaxLength(100);
+            builder.HasKey(s => s.ShoeId);
+
+            builder.Property(s => s.Model).IsRequired().HasMaxLength(150);
 
             builder.Property(s => s.Price).HasColumnType("decimal(18,2)");
 

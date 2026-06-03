@@ -8,7 +8,9 @@ namespace SportShoes2026.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<SiZe> builder)
         {
-            builder.Property(s => s.SizeNumber).HasColumnType("decimal(4,1)");
+            builder.HasKey(s => s.SizeId);
+
+            builder.Property(s => s.SizeNumber).HasColumnType("decimal(3,1)");
 
             builder.HasIndex(s => s.SizeNumber).IsUnique();
 
