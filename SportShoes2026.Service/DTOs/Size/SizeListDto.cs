@@ -4,5 +4,6 @@
     {
         public int SizeId { get; set; }
         public decimal Number { get; set; }
+        public bool IsActive { get; set; }
     }
 }

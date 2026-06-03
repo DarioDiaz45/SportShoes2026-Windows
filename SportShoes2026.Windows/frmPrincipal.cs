@@ -35,5 +35,14 @@ namespace SportShoes2026.Windows
         {
             lblUsuario.Text = $"{Session.UsuarioActual!.UserName}";
         }
+
+        private void btnSize_Click(object sender, EventArgs e)
+        {
+            using (var frm = _serviceProvider.GetRequiredService<frmSize>())
+            {
+                frm.Text = "Sizes List";
+                frm.ShowDialog();
+            }
+        }
     }
 }

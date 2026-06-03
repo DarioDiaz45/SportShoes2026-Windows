@@ -3,9 +3,9 @@ using SportShoes2026.Data;
 using SportShoes2026.Entities;
 using SportShoes2026.Service.Common;
 using SportShoes2026.Service.DTOs.Size;
+using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Service.Mappers;
-using System.Drawing;
 
 namespace SportShoes2026.Service.Services
 {
@@ -18,6 +18,22 @@ namespace SportShoes2026.Service.Services
         {
             _uow = uow;
             _validator = validator;
+        }
+
+        public Result<List<SizeListDto>> FilterByAsset(bool active)
+        {
+            try
+            {
+                var query = _uow.Sizes.Query();
+                var lista = query.Where(s => s.Active == active);
+                var listaDto = lista.Select(s => SizeMapper.ToListDto(s)).ToList();
+                return Result<List<SizeListDto>>.Success(listaDto);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<List<SizeListDto>>.Failure($"Error trying to filter Size types: {ex.Message}");
+            }
         }
 
         public Result<List<SizeListDto>> GetAll()

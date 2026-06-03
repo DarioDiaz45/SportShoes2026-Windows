@@ -11,7 +11,8 @@ namespace SportShoes2026.Service.Mappers
             return new SizeListDto
             {
                 SizeId = size.SizeId,
-                Number = size.SizeNumber
+                Number = size.SizeNumber,
+                IsActive = size.Active
             };
 
         }

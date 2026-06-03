@@ -136,6 +136,7 @@
             btnSize.TabIndex = 1;
             btnSize.Text = "Size";
             btnSize.UseVisualStyleBackColor = true;
+            btnSize.Click += btnSize_Click;
             // 
             // btnShoes
             // 

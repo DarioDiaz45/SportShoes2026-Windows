@@ -1,4 +1,5 @@
-﻿using SportShoes2026.Service.DTOs.Sport;
+﻿using SportShoes2026.Service.DTOs.Size;
+using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.DTOs.SportShoe;
 
 namespace SportShoes2026.Windows.Helpers
@@ -25,6 +26,12 @@ namespace SportShoes2026.Windows.Helpers
                     r.Cells[0].Value = sportShoeDto.SportId;
                     r.Cells[1].Value = sportShoeDto.SportName;
                     r.Cells[2].Value = sportShoeDto.IsActive;
+                    break;
+
+                case SizeListDto sizeListDto:
+                    r.Cells[0].Value = sizeListDto.SizeId;
+                    r.Cells[1].Value = sizeListDto.Number;
+                    r.Cells[2].Value = sizeListDto.IsActive;
                     break;
             }
 
