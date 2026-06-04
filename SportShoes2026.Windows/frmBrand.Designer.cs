@@ -35,7 +35,9 @@
             tsbDelete = new ToolStripButton();
             tsbEdit = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
-            tsbFilter = new ToolStripButton();
+            tsbFilter = new ToolStripDropDownButton();
+            activeToolStripMenuItem = new ToolStripMenuItem();
+            noActiveToolStripMenuItem = new ToolStripMenuItem();
             tsbUpdate = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
             tsbClose = new ToolStripButton();
@@ -91,6 +93,7 @@
             tsbDelete.Size = new Size(52, 67);
             tsbDelete.Text = "Delete";
             tsbDelete.TextImageRelation = TextImageRelation.ImageAboveText;
+            tsbDelete.Click += tsbDelete_Click;
             // 
             // tsbEdit
             // 
@@ -109,13 +112,28 @@
             // 
             // tsbFilter
             // 
+            tsbFilter.DropDownItems.AddRange(new ToolStripItem[] { activeToolStripMenuItem, noActiveToolStripMenuItem });
             tsbFilter.Image = (Image)resources.GetObject("tsbFilter.Image");
             tsbFilter.ImageScaling = ToolStripItemImageScaling.None;
             tsbFilter.ImageTransparentColor = Color.Magenta;
             tsbFilter.Name = "tsbFilter";
-            tsbFilter.Size = new Size(52, 67);
+            tsbFilter.Size = new Size(61, 67);
             tsbFilter.Text = "Filter";
             tsbFilter.TextImageRelation = TextImageRelation.ImageAboveText;
+            // 
+            // activeToolStripMenuItem
+            // 
+            activeToolStripMenuItem.Name = "activeToolStripMenuItem";
+            activeToolStripMenuItem.Size = new Size(180, 22);
+            activeToolStripMenuItem.Text = "Active";
+            activeToolStripMenuItem.Click += activeToolStripMenuItem_Click;
+            // 
+            // noActiveToolStripMenuItem
+            // 
+            noActiveToolStripMenuItem.Name = "noActiveToolStripMenuItem";
+            noActiveToolStripMenuItem.Size = new Size(180, 22);
+            noActiveToolStripMenuItem.Text = "NoActive";
+            noActiveToolStripMenuItem.Click += noActiveToolStripMenuItem_Click;
             // 
             // tsbUpdate
             // 
@@ -126,6 +144,7 @@
             tsbUpdate.Size = new Size(52, 67);
             tsbUpdate.Text = "Update";
             tsbUpdate.TextImageRelation = TextImageRelation.ImageAboveText;
+            tsbUpdate.Click += tsbUpdate_Click;
             // 
             // toolStripSeparator2
             // 
@@ -237,7 +256,6 @@
         private ToolStripButton tsbDelete;
         private ToolStripButton tsbEdit;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripButton tsbFilter;
         private ToolStripButton tsbUpdate;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton tsbClose;
@@ -249,5 +267,8 @@
         private DataGridViewTextBoxColumn colBrandId;
         private DataGridViewTextBoxColumn ColBrandName;
         private DataGridViewCheckBoxColumn colActive;
+        private ToolStripDropDownButton tsbFilter;
+        private ToolStripMenuItem activeToolStripMenuItem;
+        private ToolStripMenuItem noActiveToolStripMenuItem;
     }
 }

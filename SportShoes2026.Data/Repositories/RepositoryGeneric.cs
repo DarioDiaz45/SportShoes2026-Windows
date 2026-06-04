@@ -8,7 +8,7 @@ namespace SportShoes2026.Data.Repositories
         protected readonly ShoesDbContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        public RepositoryGeneric(ShoesDbContext context )
+        public RepositoryGeneric(ShoesDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
@@ -16,12 +16,12 @@ namespace SportShoes2026.Data.Repositories
 
         public void Add(T entity)
         {
-          _dbSet.Add(entity);
+            _dbSet.Add(entity);
         }
 
         public virtual void Delete(int id)
         {
-            var entity=_dbSet.Find(id);
+            var entity = _dbSet.Find(id);
             if (entity is null)
             {
                 throw new KeyNotFoundException($"The entity ID could not be deleted:{id} from the table {typeof(T).Name}");
@@ -31,16 +31,16 @@ namespace SportShoes2026.Data.Repositories
 
         public List<T> GetAll()
         {
-           
-           return _dbSet.AsNoTracking().ToList();
+
+            return _dbSet.AsNoTracking().ToList();
 
         }
 
         public T? GetById(int id)
         {
-           
+
             return _dbSet.Find(id);
-            
+
         }
 
         public IQueryable<T> Query()
@@ -50,7 +50,7 @@ namespace SportShoes2026.Data.Repositories
 
         public void Update(T entity, int id)
         {
-           
+
             var entityInDb = _dbSet.Find(id);
             if (entityInDb is null)
             {

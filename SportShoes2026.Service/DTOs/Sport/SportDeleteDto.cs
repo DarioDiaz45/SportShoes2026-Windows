@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SportShoes2026.Service.DTOs.Sport
+﻿namespace SportShoes2026.Service.DTOs.Sport
 {
     public class SportDeleteDto
     {

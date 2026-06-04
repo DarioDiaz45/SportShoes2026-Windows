@@ -15,9 +15,7 @@ namespace SportShoes2026.Service.Services
 
         private readonly IValidator<Sport> _validator;
 
-        public SportService(
-            IUnitOfWork uow,
-            IValidator<Sport> validator)
+        public SportService(IUnitOfWork uow,IValidator<Sport> validator)
         {
             _uow = uow;
             _validator = validator;
@@ -66,7 +64,7 @@ namespace SportShoes2026.Service.Services
                 _uow.Save();
                 return Result.Success();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException)
             {
                 _uow.RollBack();
                 return Result.ConcurrencyFailure("Otro usuario modificó el registro\nLa grilla se recargará automáticamente");

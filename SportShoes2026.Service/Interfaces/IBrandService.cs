@@ -1,5 +1,6 @@
 ﻿using SportShoes2026.Service.Common;
 using SportShoes2026.Service.DTOs.Brand;
+using SportShoes2026.Service.DTOs.Sport;
 
 namespace SportShoes2026.Service.Interfaces
 {
@@ -9,10 +10,13 @@ namespace SportShoes2026.Service.Interfaces
 
         Result Add(BrandCreateDto dto);
 
-        Result Delete(int id);
+        Result Delete(BrandDeleteDto dto);
 
         Result<BrandUpdateDto> GetForUpdate(int id);
+        Result<BrandDeleteDto> GetForDelete(int id);
 
         Result Update(BrandUpdateDto dto);
+
+        Result<List<BrandListDto>> FilterByAsset(bool active);
     }
 }

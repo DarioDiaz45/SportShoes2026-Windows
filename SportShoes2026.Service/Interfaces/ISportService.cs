@@ -9,7 +9,7 @@ namespace SportShoes2026.Service.Interfaces
 
         Result Add(SportCreateDto dto);
 
-        Result Delete(SportDeleteDto dto);
+        Result Delete(SportDeleteDto sportDeleteDto);
 
         Result<SportUpdateDto> GetForUpdate(int id);
 

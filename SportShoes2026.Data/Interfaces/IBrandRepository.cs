@@ -2,7 +2,7 @@
 
 namespace SportShoes2026.Data.Interfaces
 {
-    public interface IBrandRepository : IRepositoryGeneric<Brand>
+    public interface IBrandRepository : IRepositoryConcurrent<Brand>
     {
         bool ExistSameName(string name, int? brandId = null);
 

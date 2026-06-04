@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using SportShoes2026.Data;
 using SportShoes2026.Entities;
 using SportShoes2026.Service.Common;
@@ -52,32 +53,45 @@ namespace SportShoes2026.Service.Services
             }
         }
 
-        public Result Delete(int id)
+        public Result Delete(BrandDeleteDto brandDeleteDto)
         {
-            var brand = _uow.Brands.GetById(id);
-
-            if (brand == null)
-            {
-                return Result.Failure("Brand not found");
-            }
-
-            if (_uow.Brands.HasSportShoes(id))
-            {
-                return Result.Failure(
-                    "Cannot delete brand with sport shoes");
-            }
-
             try
             {
-                _uow.Brands.Delete(id);
-
+                _uow.Brands.Delete(brandDeleteDto.BrandId, brandDeleteDto.RowVersion);
                 _uow.Save();
-
                 return Result.Success();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                _uow.RollBack();
+                return Result.ConcurrencyFailure("Otro usuario modificó el registro\nLa grilla se recargará automáticamente");
+
+            }
+            catch (KeyNotFoundException)
+            {
+                _uow.RollBack();
+                return Result.Failure(@$"Brand con ID: {brandDeleteDto.BrandId} not found");
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                _uow.RollBack();
+                return Result.Failure($"Error trying to delete a brand {ex.Message}");
+            }
+        }
+
+        public Result<List<BrandListDto>> FilterByAsset(bool active)
+        {
+            try
+            {
+                var query = _uow.Brands.Query();
+                var lista = query.Where(s => s.Active == active);
+                var listaDto = lista.Select(s => BrandMapper.ToListDto(s)).ToList();
+                return Result<List<BrandListDto>>.Success(listaDto);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<List<BrandListDto>>.Failure($"Error trying to filter Brand types: {ex.Message}");
             }
         }
 
@@ -89,6 +103,18 @@ namespace SportShoes2026.Service.Services
                 .ToList();
 
             return Result<List<BrandListDto>>.Success(brands);
+        }
+
+        public Result<BrandDeleteDto> GetForDelete(int id)
+        {
+            var brand = _uow.Brands.GetById(id);
+
+            if (brand == null)
+            {
+                return Result<BrandDeleteDto>.Failure("Brand not found");
+            }
+
+            return Result<BrandDeleteDto>.Success(BrandMapper.ToDeleteDto(brand));
         }
 
         public Result<BrandUpdateDto> GetForUpdate(int id)

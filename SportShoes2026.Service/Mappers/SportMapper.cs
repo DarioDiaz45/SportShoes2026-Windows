@@ -38,8 +38,7 @@ namespace SportShoes2026.Service.Mappers
             };
         }
 
-        public static SportDeleteDto ToDeleteDto(
-            Sport sport)
+        public static SportDeleteDto ToDeleteDto(Sport sport)
         {
             return new SportDeleteDto
             {
