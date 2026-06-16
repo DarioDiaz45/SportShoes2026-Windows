@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSize));
             pnlCrud = new Panel();
             toolStrip1 = new ToolStrip();
+            tsbNew = new ToolStripButton();
+            tsbDelete = new ToolStripButton();
             tsbEdit = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
             tsbFilter = new ToolStripDropDownButton();
@@ -63,12 +65,34 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { tsbEdit, toolStripSeparator1, tsbFilter, tsbUpdate, toolStripSeparator2, tsbClose });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { tsbNew, tsbDelete, tsbEdit, toolStripSeparator1, tsbFilter, tsbUpdate, toolStripSeparator2, tsbClose });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(800, 70);
             toolStrip1.TabIndex = 0;
             toolStrip1.Text = "toolStrip1";
+            // 
+            // tsbNew
+            // 
+            tsbNew.Image = (Image)resources.GetObject("tsbNew.Image");
+            tsbNew.ImageScaling = ToolStripItemImageScaling.None;
+            tsbNew.ImageTransparentColor = Color.Magenta;
+            tsbNew.Name = "tsbNew";
+            tsbNew.Size = new Size(52, 67);
+            tsbNew.Text = "New";
+            tsbNew.TextImageRelation = TextImageRelation.ImageAboveText;
+            tsbNew.Click += tsbNew_Click;
+            // 
+            // tsbDelete
+            // 
+            tsbDelete.Image = (Image)resources.GetObject("tsbDelete.Image");
+            tsbDelete.ImageScaling = ToolStripItemImageScaling.None;
+            tsbDelete.ImageTransparentColor = Color.Magenta;
+            tsbDelete.Name = "tsbDelete";
+            tsbDelete.Size = new Size(52, 67);
+            tsbDelete.Text = "Delete";
+            tsbDelete.TextImageRelation = TextImageRelation.ImageAboveText;
+            tsbDelete.Click += tsbDelete_Click_1;
             // 
             // tsbEdit
             // 
@@ -79,6 +103,7 @@
             tsbEdit.Size = new Size(52, 67);
             tsbEdit.Text = "Edit";
             tsbEdit.TextImageRelation = TextImageRelation.ImageAboveText;
+            tsbEdit.Click += tsbEdit_Click;
             // 
             // toolStripSeparator1
             // 
@@ -232,5 +257,7 @@
         private ToolStripDropDownButton tsbFilter;
         private ToolStripMenuItem activeToolStripMenuItem;
         private ToolStripMenuItem noActiveToolStripMenuItem;
+        private ToolStripButton tsbNew;
+        private ToolStripButton tsbDelete;
     }
 }

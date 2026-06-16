@@ -18,5 +18,6 @@ namespace SportShoes2026.Service.Interfaces
         Result Update(BrandUpdateDto dto);
 
         Result<List<BrandListDto>> FilterByAsset(bool active);
+       
     }
 }

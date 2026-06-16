@@ -148,6 +148,7 @@ namespace SportShoes2026.Service.Services
             }
 
             sport.SportName = dto.SportName;
+            sport.Active = dto.IsActive;
 
             if (_uow.Sports
                 .ExistSameName(

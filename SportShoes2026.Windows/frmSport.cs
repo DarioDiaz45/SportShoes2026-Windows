@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SportShoes2026.Service.DTOs.Brand;
 using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Windows.Helpers;
@@ -140,38 +141,39 @@ namespace SportShoes2026.Windows
 
         private void tsbDelete_Click(object sender, EventArgs e)
         {
-            if(dgvDatos.SelectedRows.Count == 0)
+            if (dgvDatos.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Debe seleccionar un registro", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if(filaSeleccionada.Tag is null)
+            if (filaSeleccionada.Tag is null)
             {
                 return;
             }
             SportListDto sportSeleccionado = (SportListDto)filaSeleccionada.Tag;
-            using (var scope=_serviceProvider.CreateScope())
-            {   var sportService = scope.ServiceProvider.GetRequiredService<ISportService>();
-                var resultadoConsulta=sportService.GetForDelete(sportSeleccionado.SportId);
-                if(resultadoConsulta.IsFailure)
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var sportService = scope.ServiceProvider.GetRequiredService<ISportService>();
+                var resultadoConsulta = sportService.GetForDelete(sportSeleccionado.SportId);
+                if (resultadoConsulta.IsFailure)
                 {
                     string errores = string.Join("\n", resultadoConsulta.Errors);
                     MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 var tipoDeleteDto = resultadoConsulta.Value;
-                var dr=(MessageBox.Show($"¿Está seguro que desea eliminar el deporte {sportSeleccionado.SportName}?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question));
-                if(dr == DialogResult.No)
+                var dr = (MessageBox.Show($"¿Está seguro que desea eliminar el deporte {sportSeleccionado.SportName}?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question));
+                if (dr == DialogResult.No)
                 {
                     return;
                 }
-           
-                
+
+
                 try
                 {
                     var resultadoEliminacion = sportService.Delete(tipoDeleteDto!);
-                     if (resultadoEliminacion.IsConcurrencyConflict)
+                    if (resultadoEliminacion.IsConcurrencyConflict)
                     {
                         string errores = string.Join("\n", resultadoConsulta.Errors);
                         MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -183,7 +185,7 @@ namespace SportShoes2026.Windows
                         MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                   
+
                     MessageBox.Show("The sport was successfully eliminated", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     RecargarGrilla();
                 }
@@ -191,6 +193,76 @@ namespace SportShoes2026.Windows
                 {
 
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void tsbNew_Click(object sender, EventArgs e)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                using (frmSportAe frm = scope.ServiceProvider.GetRequiredService<frmSportAe>())
+                {
+                    frm.Text = "New Sport";
+                    frm.ShowDialog();
+                    if (frm.DataChanged)
+                    {
+                        RecargarGrilla();
+                    }
+
+                }
+            }
+        }
+
+        private void tsbEdit_Click(object sender, EventArgs e)
+        {
+
+            if (dgvDatos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Debe seleccionar una fila de la grilla",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            var filaSeleccionada = dgvDatos.SelectedRows[0];
+            if (filaSeleccionada.Tag is null) return;
+            var sportListDto = (SportListDto)filaSeleccionada.Tag;
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                try
+                {
+                    var SportServicio = scope.ServiceProvider
+                     .GetRequiredService<ISportService>();
+                    var resultadoConsulta = SportServicio
+                        .GetForUpdate(sportListDto.SportId);
+                    if (resultadoConsulta.IsFailure)
+                    {
+                        ErrorHelper.MostrarErrores(resultadoConsulta.Errors);
+                        return;
+                    }
+                    var sportEditDto = resultadoConsulta.Value;
+                    using (frmSportAe frm = scope.ServiceProvider
+                        .GetRequiredService<frmSportAe>())
+                    {
+                        frm.Text = "Editar Tipo de Bombón";
+                        frm.SetTipo(sportEditDto);
+                        frm.ShowDialog();
+                        if (frm.ConcurrencyConflict)
+                        {
+                            RecargarGrilla();
+                        }
+                        if (frm.DataChanged)
+                        {
+                            RecargarGrilla();
+                        }
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message, "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

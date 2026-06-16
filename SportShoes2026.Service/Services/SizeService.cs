@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using SportShoes2026.Data;
 using SportShoes2026.Entities;
 using SportShoes2026.Service.Common;
@@ -43,8 +44,7 @@ namespace SportShoes2026.Service.Services
             .Select(SizeMapper.ToListDto)
             .ToList();
 
-            return Result<List<SizeListDto>>
-                .Success(sizes);
+            return Result<List<SizeListDto>>.Success(sizes);
         }
 
         public Result<SizeUpdateDto> GetForUpdate(int id)
@@ -57,41 +57,34 @@ namespace SportShoes2026.Service.Services
                     .Failure("Size not found");
             }
 
-            return Result<SizeUpdateDto>
-                .Success(
-                    SizeMapper.ToUpdateDto(size));
+            return Result<SizeUpdateDto>.Success(SizeMapper.ToUpdateDto(size));
         }
 
         public Result Update(SizeUpdateDto dto)
         {
-            var size =
-               _uow.Sizes.GetById(dto.SizeId);
+            var size = _uow.Sizes.GetById(dto.SizeId);
 
             if (size == null)
             {
-                return Result.Failure(
-                    "Size not found");
+                return Result.Failure("Size not found");
             }
 
             size.SizeNumber = dto.Number;
+            size.Active=dto.IsActive;
 
             var validation =
                 _validator.Validate(size);
 
             if (!validation.IsValid)
             {
-                return Result.Failure(
-                    validation.Errors
-                        .Select(e => e.ErrorMessage)
-                        .ToList());
+                return Result.Failure(validation.Errors.Select(e => e.ErrorMessage).ToList());
             }
 
             if (_uow.Sizes.ExistSameNumber(
                 size.SizeNumber,
                 size.SizeId))
             {
-                return Result.Failure(
-                    "Size already exists");
+                return Result.Failure("Size already exists");
             }
 
             try
@@ -105,5 +98,74 @@ namespace SportShoes2026.Service.Services
                 return Result.Failure(ex.Message);
             }
         }
+        public Result Add(SizeCreateDto dto)
+        {
+            var size = SizeMapper.ToEntity(dto);
+
+            var validation = _validator.Validate(size);
+
+            if (!validation.IsValid)
+            {
+                return Result.Failure(
+                    validation.Errors.Select(e => e.ErrorMessage).ToList());
+            }
+
+            if (_uow.Sizes.ExistSameNumber(size.SizeNumber))
+            {
+                return Result.Failure("Sport already exists");
+            }
+
+            try
+            {
+                _uow.Sizes.Add(size);
+
+                _uow.Save();
+
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure(ex.Message);
+            }
+        }
+        public Result Delete(SizeDeleteDto sizeDeleteDto)
+        {
+            try
+            {
+                _uow.Sizes.Delete(sizeDeleteDto.SizeId, sizeDeleteDto.RowVersion);
+                _uow.Save();
+                return Result.Success();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                _uow.RollBack();
+                return Result.ConcurrencyFailure("Otro usuario modificó el registro\nLa grilla se recargará automáticamente");
+
+            }
+            catch (KeyNotFoundException)
+            {
+                _uow.RollBack();
+                return Result.Failure(@$"Sport con ID: {sizeDeleteDto.SizeId}not found");
+            }
+            catch (Exception ex)
+            {
+                _uow.RollBack();
+                return Result.Failure($"Error trying to delete a sport {ex.Message}");
+            }
+        }
+
+        public Result<SizeDeleteDto> GetForDelete(int id)
+        {
+            var size = _uow.Sizes.GetById(id);
+
+            if (size == null)
+            {
+                return Result<SizeDeleteDto>.Failure("Size not found");
+            }
+
+            return Result<SizeDeleteDto>.Success(SizeMapper.ToDeleteDto(size));
+        }
+
+       
     }
 }

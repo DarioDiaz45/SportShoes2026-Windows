@@ -1,7 +1,5 @@
 ﻿using SportShoes2026.Entities;
 using SportShoes2026.Service.DTOs.Brand;
-using SportShoes2026.Service.DTOs.Sport;
-using System.Drawing;
 
 namespace SportShoes2026.Service.Mappers
 {
@@ -30,7 +28,9 @@ namespace SportShoes2026.Service.Mappers
             return new BrandUpdateDto
             {
                 BrandId = brand.BrandId,
-                BrandName = brand.BrandName
+                BrandName = brand.BrandName,
+                Active = brand.Active,
+                RowVersion = brand.RowVersion
             };
         }
 
@@ -43,6 +43,5 @@ namespace SportShoes2026.Service.Mappers
             };
         }
     }
-}   
+}
 
-       

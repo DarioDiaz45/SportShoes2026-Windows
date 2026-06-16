@@ -6,6 +6,8 @@
 
         public string BrandName { get; set; } = null!;
 
+        public bool Active { get; set; }
+
         public byte[] RowVersion { get; set; } = null!;
 
     }

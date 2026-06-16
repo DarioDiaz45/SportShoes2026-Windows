@@ -88,6 +88,7 @@
             txtUser.Name = "txtUser";
             txtUser.Size = new Size(241, 23);
             txtUser.TabIndex = 0;
+            txtUser.Text = "admin";
             // 
             // txtPassword
             // 
@@ -95,6 +96,7 @@
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(241, 23);
             txtPassword.TabIndex = 1;
+            txtPassword.Text = "1234";
             txtPassword.UseSystemPasswordChar = true;
             // 
             // errorProvider1

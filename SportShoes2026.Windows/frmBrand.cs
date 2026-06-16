@@ -196,5 +196,74 @@ namespace SportShoes2026.Windows
             RecargarGrilla();
             ManejarControles(false);
         }
+
+        private void tsbNew_Click(object sender, EventArgs e)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                using (frmBrandAe frm = scope.ServiceProvider.GetRequiredService<frmBrandAe>())
+                {
+                    frm.Text = "New Brand";
+                    frm.ShowDialog();
+                    if (frm.DataChanged)
+                    {
+                        RecargarGrilla();
+                    }
+
+                }
+            }
+        }
+
+        private void tsbEdit_Click(object sender, EventArgs e)
+        {
+            if (dgvDatos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Debe seleccionar una fila de la grilla",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            var filaSeleccionada = dgvDatos.SelectedRows[0];
+            if (filaSeleccionada.Tag is null) return;
+            var brandListDto = (BrandListDto)filaSeleccionada.Tag;
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                try
+                {
+                    var brandServicio = scope.ServiceProvider
+                     .GetRequiredService<IBrandService>();
+                    var resultadoConsulta = brandServicio
+                        .GetForUpdate(brandListDto.BrandId);
+                    if (resultadoConsulta.IsFailure)
+                    {
+                        ErrorHelper.MostrarErrores(resultadoConsulta.Errors);
+                        return;
+                    }
+                    var brandEditDto = resultadoConsulta.Value;
+                    using (frmBrandAe frm = scope.ServiceProvider
+                        .GetRequiredService<frmBrandAe>())
+                    {
+                        frm.Text = "Editar Tipo de Bombón";
+                        frm.SetTipo(brandEditDto);
+                        frm.ShowDialog();
+                        if (frm.ConcurrencyConflict)
+                        {
+                            RecargarGrilla();
+                        }
+                        if (frm.DataChanged)
+                        {
+                            RecargarGrilla();
+                        }
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message, "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }

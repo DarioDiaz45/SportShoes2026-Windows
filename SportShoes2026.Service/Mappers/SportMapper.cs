@@ -34,7 +34,9 @@ namespace SportShoes2026.Service.Mappers
             return new SportUpdateDto
             {
                 SportId = sport.SportId,
-                SportName = sport.SportName
+                SportName = sport.SportName,
+                IsActive = sport.Active,
+                RowVersion = sport.RowVersion
             };
         }
 
