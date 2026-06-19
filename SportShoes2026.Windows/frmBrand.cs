@@ -3,6 +3,7 @@ using SportShoes2026.Service.DTOs.Brand;
 using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Windows.Helpers;
+using System.ComponentModel;
 
 namespace SportShoes2026.Windows
 {
@@ -11,6 +12,7 @@ namespace SportShoes2026.Windows
         private readonly IServiceProvider _serviceProvider;
         private List<BrandListDto>? _listBrands;
         private bool filtroActivo = false;
+        private BindingSource _bindingSource = new BindingSource();
         public frmBrand(IServiceProvider serviceprovider)
         {
             InitializeComponent();
@@ -55,33 +57,25 @@ namespace SportShoes2026.Windows
 
         private void MostrarDatosEnGrillas(List<BrandListDto>? listBrands)
         {
-            GridHelper.LimpiarGrilla(dgvDatos);
+            
             if (listBrands is null || listBrands.Count == 0)
             {
                 return;
             }
-            foreach (var item in listBrands)
-            {
-                var r = GridHelper.ConstruirFila(dgvDatos);
-                GridHelper.SetearFila(r, item);
-                GridHelper.AgregarFila(r, dgvDatos);
-            }
+            var bindingList = new BindingList<BrandListDto>(listBrands);
+            _bindingSource.DataSource = bindingList;
+            dgvDatos.DataSource = _bindingSource;
             lblCantidad.Text = listBrands.Count.ToString();
         }
 
         private void tsbDelete_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
                 MessageBox.Show("Debe seleccionar un registro", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null)
-            {
-                return;
-            }
-            BrandListDto brandSeleccionado = (BrandListDto)filaSeleccionada.Tag;
+            BrandListDto brandSeleccionado = (BrandListDto)_bindingSource.Current;
             using (var scope = _serviceProvider.CreateScope())
             {
                 var brandService = scope.ServiceProvider.GetRequiredService<IBrandService>();
@@ -216,15 +210,13 @@ namespace SportShoes2026.Windows
 
         private void tsbEdit_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
                 MessageBox.Show("Debe seleccionar una fila de la grilla",
                     "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null) return;
-            var brandListDto = (BrandListDto)filaSeleccionada.Tag;
+            BrandListDto brandListDto = (BrandListDto)_bindingSource.Current;
             using (var scope = _serviceProvider.CreateScope())
             {
                 try

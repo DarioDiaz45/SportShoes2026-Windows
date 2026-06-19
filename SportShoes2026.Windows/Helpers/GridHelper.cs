@@ -23,23 +23,23 @@ namespace SportShoes2026.Windows.Helpers
         {
             switch (obj)
             {
-                case SportListDto sportShoeDto:
-                    r.Cells[0].Value = sportShoeDto.SportId;
-                    r.Cells[1].Value = sportShoeDto.SportName;
-                    r.Cells[2].Value = sportShoeDto.IsActive;
-                    break;
+                //case SportListDto sportShoeDto:
+                //    r.Cells[0].Value = sportShoeDto.SportId;
+                //    r.Cells[1].Value = sportShoeDto.SportName;
+                //    r.Cells[2].Value = sportShoeDto.IsActive;
+                //    break;
 
-                case SizeListDto sizeListDto:
-                    r.Cells[0].Value = sizeListDto.SizeId;
-                    r.Cells[1].Value = sizeListDto.Number;
-                    r.Cells[2].Value = sizeListDto.IsActive;
-                    break;
-                case BrandListDto brandListDto:
-                    r.Cells[0].Value = brandListDto.BrandId;
-                    r.Cells[1].Value = brandListDto.BrandName;
-                    r.Cells[2].Value = brandListDto.Country;
-                    r.Cells[3].Value = brandListDto.IsActive;
-                    break;
+                //case SizeListDto sizeListDto:
+                //    r.Cells[0].Value = sizeListDto.SizeId;
+                //    r.Cells[1].Value = sizeListDto.Number;
+                //    r.Cells[2].Value = sizeListDto.IsActive;
+                //    break;
+                //case BrandListDto brandListDto:
+                //    r.Cells[0].Value = brandListDto.BrandId;
+                //    r.Cells[1].Value = brandListDto.BrandName;
+                //    r.Cells[2].Value = brandListDto.Country;
+                //    r.Cells[3].Value = brandListDto.IsActive;
+                //    break;
             }
 
             r.Tag = obj;

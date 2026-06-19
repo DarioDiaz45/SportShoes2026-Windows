@@ -204,35 +204,47 @@
             // 
             // dgvDatos
             // 
+            dgvDatos.AllowUserToAddRows = false;
+            dgvDatos.AllowUserToDeleteRows = false;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colBrandId, ColBrandName, colCountry, colActive });
             dgvDatos.Dock = DockStyle.Fill;
             dgvDatos.Location = new Point(0, 0);
             dgvDatos.Name = "dgvDatos";
+            dgvDatos.ReadOnly = true;
+            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(799, 329);
             dgvDatos.TabIndex = 0;
             // 
             // colBrandId
             // 
+            colBrandId.DataPropertyName = "BrandId";
             colBrandId.HeaderText = "Id";
             colBrandId.Name = "colBrandId";
+            colBrandId.ReadOnly = true;
             colBrandId.Visible = false;
             // 
             // ColBrandName
             // 
             ColBrandName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            ColBrandName.DataPropertyName = "BrandName";
             ColBrandName.HeaderText = "Name";
             ColBrandName.Name = "ColBrandName";
+            ColBrandName.ReadOnly = true;
             // 
             // colCountry
             // 
+            colCountry.DataPropertyName = "Country";
             colCountry.HeaderText = "Country";
             colCountry.Name = "colCountry";
+            colCountry.ReadOnly = true;
             // 
             // colActive
             // 
+            colActive.DataPropertyName = "IsActive";
             colActive.HeaderText = "Active";
             colActive.Name = "colActive";
+            colActive.ReadOnly = true;
             // 
             // frmBrand
             // 

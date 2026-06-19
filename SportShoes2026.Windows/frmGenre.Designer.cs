@@ -90,11 +90,15 @@
             // 
             // dgvDatos
             // 
+            dgvDatos.AllowUserToAddRows = false;
+            dgvDatos.AllowUserToDeleteRows = false;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colIdGenre, colTypeGenre, colActive });
             dgvDatos.Dock = DockStyle.Fill;
             dgvDatos.Location = new Point(0, 0);
             dgvDatos.Name = "dgvDatos";
+            dgvDatos.ReadOnly = true;
+            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(775, 235);
             dgvDatos.TabIndex = 0;
             // 
@@ -102,6 +106,7 @@
             // 
             colIdGenre.HeaderText = "IdGenre";
             colIdGenre.Name = "colIdGenre";
+            colIdGenre.ReadOnly = true;
             colIdGenre.Visible = false;
             // 
             // colTypeGenre
@@ -109,11 +114,13 @@
             colTypeGenre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             colTypeGenre.HeaderText = "Genre";
             colTypeGenre.Name = "colTypeGenre";
+            colTypeGenre.ReadOnly = true;
             // 
             // colActive
             // 
             colActive.HeaderText = "Active";
             colActive.Name = "colActive";
+            colActive.ReadOnly = true;
             // 
             // frmGenre
             // 

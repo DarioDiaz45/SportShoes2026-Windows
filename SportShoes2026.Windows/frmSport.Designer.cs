@@ -211,11 +211,13 @@
             dgvDatos.Location = new Point(0, 0);
             dgvDatos.Name = "dgvDatos";
             dgvDatos.ReadOnly = true;
+            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(800, 318);
             dgvDatos.TabIndex = 0;
             // 
             // colIdSport
             // 
+            colIdSport.DataPropertyName = "SportId";
             colIdSport.HeaderText = "Id";
             colIdSport.Name = "colIdSport";
             colIdSport.ReadOnly = true;
@@ -224,12 +226,14 @@
             // colSportName
             // 
             colSportName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colSportName.DataPropertyName = "SportName";
             colSportName.HeaderText = "Sport";
             colSportName.Name = "colSportName";
             colSportName.ReadOnly = true;
             // 
             // colActive
             // 
+            colActive.DataPropertyName = "IsActive";
             colActive.HeaderText = "Active";
             colActive.Name = "colActive";
             colActive.ReadOnly = true;
@@ -270,13 +274,13 @@
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton tsbClose;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colIdSport;
-        private DataGridViewTextBoxColumn colSportName;
-        private DataGridViewCheckBoxColumn colActive;
         private Label lblCantidad;
         private Label label1;
         private ToolStripDropDownButton tsbFilter;
         private ToolStripMenuItem activeToolStripMenuItem;
         private ToolStripMenuItem noActiveToolStripMenuItem;
+        private DataGridViewTextBoxColumn colIdSport;
+        private DataGridViewTextBoxColumn colSportName;
+        private DataGridViewCheckBoxColumn colActive;
     }
 }
