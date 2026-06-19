@@ -53,5 +53,14 @@ namespace SportShoes2026.Windows
                 frm.ShowDialog();
             }
         }
+
+        private void btnGenres_Click(object sender, EventArgs e)
+        {
+            using (var frm = _serviceProvider.GetRequiredService<frmGenre>())
+            {
+                frm.Text = "Genres  List";
+                frm.ShowDialog();
+            }
+        }
     }
 }

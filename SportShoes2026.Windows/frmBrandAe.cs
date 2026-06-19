@@ -30,7 +30,7 @@ namespace SportShoes2026.Windows
             else
             {
                 txtNameBrand.Text = _brandUpdateDto.BrandName;
-
+                txtCountry.Text = _brandUpdateDto.Country;
                 chkActive.Checked = _brandUpdateDto.Active;
                 chkActive.Enabled = true;
                 _esEdicion = true;
@@ -53,6 +53,7 @@ namespace SportShoes2026.Windows
 
                         var _tipoCreateDto = new BrandCreateDto();
                         _tipoCreateDto.BrandName = txtNameBrand.Text;
+                        _tipoCreateDto.Country = txtCountry.Text;
                         var resultadoAgregar = _brandServicio.Add(_tipoCreateDto);
                         if (resultadoAgregar.IsFailure)
                         {
@@ -77,6 +78,7 @@ namespace SportShoes2026.Windows
                             _brandUpdateDto = new BrandUpdateDto();
                         }
                         _brandUpdateDto.BrandName = txtNameBrand.Text;
+                        _brandUpdateDto.Country = txtCountry.Text;
                         _brandUpdateDto.Active = chkActive.Checked;
 
                         var resultadoEditar = _brandServicio
@@ -115,6 +117,7 @@ namespace SportShoes2026.Windows
         private void InicializarControles()
         {
             txtNameBrand.Clear();
+            txtCountry.Clear();
             chkActive.Checked = true;
             chkActive.Enabled = false;
             txtNameBrand.Focus();
@@ -129,6 +132,11 @@ namespace SportShoes2026.Windows
                 valido = false;
                 errorProvider1.SetError(txtNameBrand, "El nombre es requerido");
 
+            }
+            if (string.IsNullOrEmpty(txtCountry.Text))
+            {
+                valido = false;
+                errorProvider1.SetError(txtCountry, "El país es requerido");
             }
             return valido;
         }

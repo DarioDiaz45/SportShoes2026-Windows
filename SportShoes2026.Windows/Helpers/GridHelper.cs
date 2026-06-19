@@ -34,10 +34,11 @@ namespace SportShoes2026.Windows.Helpers
                     r.Cells[1].Value = sizeListDto.Number;
                     r.Cells[2].Value = sizeListDto.IsActive;
                     break;
-                case BrandListDto sizeListDto:
-                    r.Cells[0].Value = sizeListDto.BrandId;
-                    r.Cells[1].Value = sizeListDto.BrandName;
-                    r.Cells[2].Value = sizeListDto.IsActive;
+                case BrandListDto brandListDto:
+                    r.Cells[0].Value = brandListDto.BrandId;
+                    r.Cells[1].Value = brandListDto.BrandName;
+                    r.Cells[2].Value = brandListDto.Country;
+                    r.Cells[3].Value = brandListDto.IsActive;
                     break;
             }
 

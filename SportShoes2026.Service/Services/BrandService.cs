@@ -141,12 +141,10 @@ namespace SportShoes2026.Service.Services
             }
 
             brand.BrandName = dto.BrandName;
+            brand.Country = dto.Country;
             brand.Active = dto.Active;
 
-            if (_uow.Brands.ExistSameName(
-                    brand.BrandName,
-                    brand.BrandId
-                    ))
+            if (_uow.Brands.ExistSameName(brand.BrandName,brand.BrandId))
             {
                 return Result.Failure("Brand already exists");
             }

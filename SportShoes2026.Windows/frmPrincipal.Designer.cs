@@ -46,6 +46,8 @@
             lblFechaTime = new Label();
             lblFecha = new Label();
             lblShoes2026 = new Label();
+            sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
+            btnGenres = new Button();
             pnlPrincipal.SuspendLayout();
             pnlMensaje.SuspendLayout();
             pnlOpciones.SuspendLayout();
@@ -96,6 +98,7 @@
             // 
             // pnlOpciones
             // 
+            pnlOpciones.Controls.Add(btnGenres);
             pnlOpciones.Controls.Add(btnBrand);
             pnlOpciones.Controls.Add(btnSport);
             pnlOpciones.Controls.Add(btnSize);
@@ -233,6 +236,17 @@
             lblShoes2026.TabIndex = 0;
             lblShoes2026.Text = "SHOES 2026";
             // 
+            // btnGenres
+            // 
+            btnGenres.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGenres.Location = new Point(25, 262);
+            btnGenres.Name = "btnGenres";
+            btnGenres.Size = new Size(147, 33);
+            btnGenres.TabIndex = 2;
+            btnGenres.Text = "Genres";
+            btnGenres.UseVisualStyleBackColor = true;
+            btnGenres.Click += btnGenres_Click;
+            // 
             // frmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -275,5 +289,7 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripStatusLabel lblUsuario;
+        private Button btnGenres;
+        private Microsoft.Data.SqlClient.SqlCommandBuilder sqlCommandBuilder1;
     }
 }

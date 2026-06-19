@@ -9,7 +9,8 @@ namespace SportShoes2026.Service.Mappers
         {
             return new Brand
             {
-                BrandName = dto.BrandName
+                BrandName = dto.BrandName,
+                Country = dto.Country
             };
         }
 
@@ -19,6 +20,7 @@ namespace SportShoes2026.Service.Mappers
             {
                 BrandId = brand.BrandId,
                 BrandName = brand.BrandName,
+                Country = brand.Country,
                 IsActive = brand.Active
             };
         }
@@ -29,6 +31,7 @@ namespace SportShoes2026.Service.Mappers
             {
                 BrandId = brand.BrandId,
                 BrandName = brand.BrandName,
+                Country = brand.Country,
                 Active = brand.Active,
                 RowVersion = brand.RowVersion
             };

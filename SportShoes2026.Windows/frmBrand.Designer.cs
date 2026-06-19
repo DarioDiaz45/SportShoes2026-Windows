@@ -48,6 +48,7 @@
             dgvDatos = new DataGridView();
             colBrandId = new DataGridViewTextBoxColumn();
             ColBrandName = new DataGridViewTextBoxColumn();
+            colCountry = new DataGridViewTextBoxColumn();
             colActive = new DataGridViewCheckBoxColumn();
             pnlCrud.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -204,7 +205,7 @@
             // dgvDatos
             // 
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colBrandId, ColBrandName, colActive });
+            dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colBrandId, ColBrandName, colCountry, colActive });
             dgvDatos.Dock = DockStyle.Fill;
             dgvDatos.Location = new Point(0, 0);
             dgvDatos.Name = "dgvDatos";
@@ -222,6 +223,11 @@
             ColBrandName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             ColBrandName.HeaderText = "Name";
             ColBrandName.Name = "ColBrandName";
+            // 
+            // colCountry
+            // 
+            colCountry.HeaderText = "Country";
+            colCountry.Name = "colCountry";
             // 
             // colActive
             // 
@@ -266,11 +272,12 @@
         private Label lblCantidad;
         private Label label1;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colBrandId;
-        private DataGridViewTextBoxColumn ColBrandName;
-        private DataGridViewCheckBoxColumn colActive;
         private ToolStripDropDownButton tsbFilter;
         private ToolStripMenuItem activeToolStripMenuItem;
         private ToolStripMenuItem noActiveToolStripMenuItem;
+        private DataGridViewTextBoxColumn colBrandId;
+        private DataGridViewTextBoxColumn ColBrandName;
+        private DataGridViewTextBoxColumn colCountry;
+        private DataGridViewCheckBoxColumn colActive;
     }
 }

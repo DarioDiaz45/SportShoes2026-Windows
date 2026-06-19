@@ -36,13 +36,15 @@
             btnOK = new Button();
             btnCancelar = new Button();
             errorProvider1 = new ErrorProvider(components);
+            lblCountry = new Label();
+            txtCountry = new TextBox();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // lblName
             // 
             lblName.AutoSize = true;
-            lblName.Location = new Point(37, 33);
+            lblName.Location = new Point(26, 33);
             lblName.Name = "lblName";
             lblName.Size = new Size(42, 15);
             lblName.TabIndex = 0;
@@ -51,7 +53,7 @@
             // chkActive
             // 
             chkActive.AutoSize = true;
-            chkActive.Location = new Point(37, 75);
+            chkActive.Location = new Point(26, 103);
             chkActive.Name = "chkActive";
             chkActive.Size = new Size(64, 19);
             chkActive.TabIndex = 1;
@@ -93,11 +95,29 @@
             // 
             errorProvider1.ContainerControl = this;
             // 
+            // lblCountry
+            // 
+            lblCountry.AutoSize = true;
+            lblCountry.Location = new Point(26, 67);
+            lblCountry.Name = "lblCountry";
+            lblCountry.Size = new Size(53, 15);
+            lblCountry.TabIndex = 5;
+            lblCountry.Text = "Country:";
+            // 
+            // txtCountry
+            // 
+            txtCountry.Location = new Point(85, 67);
+            txtCountry.Name = "txtCountry";
+            txtCountry.Size = new Size(388, 23);
+            txtCountry.TabIndex = 6;
+            // 
             // frmBrandAe
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(508, 230);
+            Controls.Add(txtCountry);
+            Controls.Add(lblCountry);
             Controls.Add(btnCancelar);
             Controls.Add(btnOK);
             Controls.Add(txtNameBrand);
@@ -118,5 +138,7 @@
         private Button btnOK;
         private Button btnCancelar;
         private ErrorProvider errorProvider1;
+        private TextBox txtCountry;
+        private Label lblCountry;
     }
 }
