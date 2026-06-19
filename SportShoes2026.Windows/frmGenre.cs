@@ -7,7 +7,7 @@ namespace SportShoes2026.Windows
     public partial class frmGenre : Form
     {
         private readonly IServiceProvider _serviceProvider;
-        private List<GenreListDto>? _listGenres;
+        
         public frmGenre(IServiceProvider serviceprovider)
         {
             InitializeComponent();
