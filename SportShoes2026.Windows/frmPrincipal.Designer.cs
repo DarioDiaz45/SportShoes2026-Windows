@@ -33,6 +33,7 @@
             label2 = new Label();
             label1 = new Label();
             pnlOpciones = new Panel();
+            btnGenres = new Button();
             btnBrand = new Button();
             btnSport = new Button();
             btnSize = new Button();
@@ -47,7 +48,6 @@
             lblFecha = new Label();
             lblShoes2026 = new Label();
             sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
-            btnGenres = new Button();
             pnlPrincipal.SuspendLayout();
             pnlMensaje.SuspendLayout();
             pnlOpciones.SuspendLayout();
@@ -70,9 +70,11 @@
             // 
             // pnlMensaje
             // 
+            pnlMensaje.BackColor = SystemColors.ControlDarkDark;
             pnlMensaje.Controls.Add(label2);
             pnlMensaje.Controls.Add(label1);
             pnlMensaje.Dock = DockStyle.Fill;
+            pnlMensaje.ForeColor = SystemColors.ActiveCaptionText;
             pnlMensaje.Location = new Point(200, 65);
             pnlMensaje.Name = "pnlMensaje";
             pnlMensaje.Size = new Size(693, 430);
@@ -98,6 +100,7 @@
             // 
             // pnlOpciones
             // 
+            pnlOpciones.BackColor = SystemColors.ControlDarkDark;
             pnlOpciones.Controls.Add(btnGenres);
             pnlOpciones.Controls.Add(btnBrand);
             pnlOpciones.Controls.Add(btnSport);
@@ -109,48 +112,64 @@
             pnlOpciones.Size = new Size(200, 430);
             pnlOpciones.TabIndex = 2;
             // 
+            // btnGenres
+            // 
+            btnGenres.BackColor = SystemColors.ControlDark;
+            btnGenres.Font = new Font("Arial", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            btnGenres.Location = new Point(25, 262);
+            btnGenres.Name = "btnGenres";
+            btnGenres.Size = new Size(147, 33);
+            btnGenres.TabIndex = 2;
+            btnGenres.Text = "Genres";
+            btnGenres.UseVisualStyleBackColor = false;
+            btnGenres.Click += btnGenres_Click;
+            // 
             // btnBrand
             // 
-            btnBrand.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnBrand.BackColor = SystemColors.ControlDark;
+            btnBrand.Font = new Font("Arial", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
             btnBrand.Location = new Point(25, 209);
             btnBrand.Name = "btnBrand";
             btnBrand.Size = new Size(147, 33);
             btnBrand.TabIndex = 0;
             btnBrand.Text = "Brand";
-            btnBrand.UseVisualStyleBackColor = true;
+            btnBrand.UseVisualStyleBackColor = false;
             btnBrand.Click += btnBrand_Click;
             // 
             // btnSport
             // 
-            btnSport.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSport.BackColor = SystemColors.ControlDark;
+            btnSport.Font = new Font("Arial", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
             btnSport.Location = new Point(25, 151);
             btnSport.Name = "btnSport";
             btnSport.Size = new Size(147, 33);
             btnSport.TabIndex = 0;
             btnSport.Text = "Sport";
-            btnSport.UseVisualStyleBackColor = true;
+            btnSport.UseVisualStyleBackColor = false;
             btnSport.Click += btnSport_Click;
             // 
             // btnSize
             // 
-            btnSize.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSize.BackColor = SystemColors.ControlDark;
+            btnSize.Font = new Font("Arial", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
             btnSize.Location = new Point(25, 93);
             btnSize.Name = "btnSize";
             btnSize.Size = new Size(147, 33);
             btnSize.TabIndex = 1;
             btnSize.Text = "Size";
-            btnSize.UseVisualStyleBackColor = true;
+            btnSize.UseVisualStyleBackColor = false;
             btnSize.Click += btnSize_Click;
             // 
             // btnShoes
             // 
-            btnShoes.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnShoes.BackColor = SystemColors.ControlDark;
+            btnShoes.Font = new Font("Arial", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
             btnShoes.Location = new Point(25, 38);
             btnShoes.Name = "btnShoes";
             btnShoes.Size = new Size(147, 33);
             btnShoes.TabIndex = 0;
             btnShoes.Text = "Shoes";
-            btnShoes.UseVisualStyleBackColor = true;
+            btnShoes.UseVisualStyleBackColor = false;
             btnShoes.Click += btnShoes_Click;
             // 
             // pnlUsuario
@@ -164,6 +183,7 @@
             // 
             // statusStrip1
             // 
+            statusStrip1.BackColor = SystemColors.ControlDarkDark;
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblUsuario });
             statusStrip1.Location = new Point(0, 0);
             statusStrip1.Name = "statusStrip1";
@@ -185,6 +205,7 @@
             // 
             // pnlShoes2026
             // 
+            pnlShoes2026.BackColor = SystemColors.GrayText;
             pnlShoes2026.Controls.Add(btnLogout);
             pnlShoes2026.Controls.Add(lblFechaTime);
             pnlShoes2026.Controls.Add(lblFecha);
@@ -197,13 +218,14 @@
             // 
             // btnLogout
             // 
+            btnLogout.BackColor = Color.Firebrick;
             btnLogout.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLogout.Location = new Point(753, 23);
+            btnLogout.Location = new Point(762, 18);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(90, 31);
             btnLogout.TabIndex = 3;
             btnLogout.Text = "Logout";
-            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += btnLogout_Click;
             // 
             // lblFechaTime
@@ -229,23 +251,12 @@
             // lblShoes2026
             // 
             lblShoes2026.AutoSize = true;
-            lblShoes2026.Font = new Font("Arial Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblShoes2026.Location = new Point(25, 19);
+            lblShoes2026.Font = new Font("Bahnschrift SemiCondensed", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblShoes2026.Location = new Point(25, 11);
             lblShoes2026.Name = "lblShoes2026";
-            lblShoes2026.Size = new Size(157, 30);
+            lblShoes2026.Size = new Size(169, 39);
             lblShoes2026.TabIndex = 0;
             lblShoes2026.Text = "SHOES 2026";
-            // 
-            // btnGenres
-            // 
-            btnGenres.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGenres.Location = new Point(25, 262);
-            btnGenres.Name = "btnGenres";
-            btnGenres.Size = new Size(147, 33);
-            btnGenres.TabIndex = 2;
-            btnGenres.Text = "Genres";
-            btnGenres.UseVisualStyleBackColor = true;
-            btnGenres.Click += btnGenres_Click;
             // 
             // frmPrincipal
             // 

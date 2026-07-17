@@ -205,6 +205,7 @@
             // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
+            dgvDatos.BackgroundColor = SystemColors.GradientActiveCaption;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colIdSport, colSportName, colActive });
             dgvDatos.Dock = DockStyle.Fill;
