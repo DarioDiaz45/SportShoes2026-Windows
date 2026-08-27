@@ -6,6 +6,7 @@ using SportShoes2026.Service.Common;
 using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Service.Mappers;
+using System.Linq.Expressions;
 
 namespace SportShoes2026.Service.Services
 {
@@ -15,44 +16,34 @@ namespace SportShoes2026.Service.Services
 
         private readonly IValidator<Sport> _validator;
 
-        public SportService(IUnitOfWork uow,IValidator<Sport> validator)
+        public SportService(IUnitOfWork uow, IValidator<Sport> validator)
         {
             _uow = uow;
             _validator = validator;
         }
 
-        public Result Add(SportCreateDto dto)
+        public Result<int> Add(SportCreateDto dto)
         {
-            var sport = SportMapper.ToEntity(dto);
-
-            var validation = _validator.Validate(sport);
-
-            if (!validation.IsValid)
-            {
-                return Result.Failure(
-                    validation.Errors
-                        .Select(e => e.ErrorMessage)
-                        .ToList());
-            }
-
-            if (_uow.Sports
-                .ExistSameName(sport.SportName))
-            {
-                return Result.Failure(
-                    "Sport already exists");
-            }
-
             try
             {
+                var sport = SportMapper.ToEntity(dto);
+                var result = _validator.Validate(sport);
+                if (!result.IsValid)
+                {
+                    return Result<int>.Failure(result.Errors.Select(e => e.ErrorMessage).ToList());
+                }
+                if (_uow.Sports.Existe(sport))
+                {
+                    return Result<int>.Failure($"Ya existe un deporte {sport.SportName}");
+                }
                 _uow.Sports.Add(sport);
-
                 _uow.Save();
-
-                return Result.Success();
+                return Result<int>.Success(sport.SportId);
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                _uow.RollBack();
+                return Result<int>.Failure($"Error al intentar agregar un tipo de bombón: {ex.Message}");
             }
         }
 
@@ -134,6 +125,78 @@ namespace SportShoes2026.Service.Services
             }
 
             return Result<SportUpdateDto>.Success(SportMapper.ToUpdateDto(sport));
+        }
+
+        public Result<PaginationResultDto<SportListDto>> ObtenerPagina(int pagina, int cantidad, string campoOrdenar, bool esAscendente, bool? filtroActivo = null)
+        {
+            try
+            {
+                Expression<Func<Sport, bool>>? filtrarPor = null;
+                if (filtroActivo is not null)
+                {
+                    filtrarPor = s => s.Active == filtroActivo;
+                }
+
+                Func<IQueryable<Sport>, IOrderedQueryable<Sport>>? ordenarPor = null;
+                switch (campoOrdenar)
+                {
+                    case "SportId":
+                        ordenarPor = q => esAscendente ?
+                            q.OrderBy(s => s.SportId) :
+                            q.OrderByDescending(s => s.SportId);
+                        break;
+                    case "Name":
+                    default:
+                        ordenarPor = q => esAscendente ?
+                            q.OrderBy(s => s.SportName) :
+                            q.OrderByDescending(s => s.SportName);
+
+                        break;
+                }
+                var resultado = _uow.Sports
+                    .ObtenerPagina(pagina, cantidad, ordenarPor,
+                        filtrarPor);
+                var listaDto = resultado.lista
+                    .Select(s => SportMapper.ToListDto(s))
+                    .ToList();
+                var resultadoPaginado = new
+                   PaginationResultDto<SportListDto>()
+                {
+                    Items = listaDto,
+                    CantidadRegistros = resultado.totalRegistros,
+                    CantidadPorPagina = cantidad,
+                    PaginaActual = pagina
+                };
+                return Result<PaginationResultDto<SportListDto>>
+                    .Success(resultadoPaginado);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<PaginationResultDto<SportListDto>>
+                    .Failure($"Error al intentar paginar: {ex.Message}");
+            }
+        }
+
+        public Result<int> ObtenerPaginaRegistro(int seleccionadoId, int cantidadPorPagina, bool? filtroActivo = null)
+        {
+            try
+            {
+                Expression<Func<Sport, bool>>? filtrarPor = null;
+                if (filtroActivo is not null)
+                {
+                    filtrarPor = s => s.Active == filtroActivo;
+                }
+                var posicion = _uow.Sports.ObtenerPosicionRegistro(seleccionadoId, filtrarPor);
+                var pagina = (int)Math.Ceiling((double)posicion / cantidadPorPagina);
+                return Result<int>.Success(pagina);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<int>
+                    .Failure($"Error al intentar obtener la pagina: {ex.Message}");
+            }
         }
 
         public Result Update(SportUpdateDto dto)

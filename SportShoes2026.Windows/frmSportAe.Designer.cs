@@ -67,6 +67,7 @@
             // 
             // btnOK
             // 
+            btnOK.BackColor = SystemColors.ControlDark;
             btnOK.Image = (Image)resources.GetObject("btnOK.Image");
             btnOK.Location = new Point(55, 162);
             btnOK.Name = "btnOK";
@@ -74,11 +75,12 @@
             btnOK.TabIndex = 3;
             btnOK.Text = "OK";
             btnOK.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnOK.UseVisualStyleBackColor = true;
+            btnOK.UseVisualStyleBackColor = false;
             btnOK.Click += btnOK_Click;
             // 
             // btnCancelar
             // 
+            btnCancelar.BackColor = SystemColors.ControlDark;
             btnCancelar.Image = (Image)resources.GetObject("btnCancelar.Image");
             btnCancelar.Location = new Point(363, 162);
             btnCancelar.Name = "btnCancelar";
@@ -86,7 +88,7 @@
             btnCancelar.TabIndex = 4;
             btnCancelar.Text = "Cancel";
             btnCancelar.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.UseVisualStyleBackColor = false;
             btnCancelar.Click += btnCancelar_Click;
             // 
             // errorProvider1
@@ -97,6 +99,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlDarkDark;
             ClientSize = new Size(519, 259);
             Controls.Add(btnCancelar);
             Controls.Add(btnOK);

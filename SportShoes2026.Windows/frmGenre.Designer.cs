@@ -45,6 +45,7 @@
             // 
             // toolStrip1
             // 
+            toolStrip1.BackColor = SystemColors.ControlDark;
             toolStrip1.Items.AddRange(new ToolStripItem[] { tsbUpdate, toolStripSeparator1, tsbClose });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
@@ -92,6 +93,7 @@
             // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
+            dgvDatos.BackgroundColor = SystemColors.ControlDarkDark;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colIdGenre, colTypeGenre, colActive });
             dgvDatos.Dock = DockStyle.Fill;

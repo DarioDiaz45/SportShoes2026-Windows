@@ -1,5 +1,4 @@
-﻿using SportShoes2026.Service.DTOs.Brand;
-using SportShoes2026.Service.DTOs.Sport;
+﻿using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Windows.Helpers;
 
@@ -16,6 +15,7 @@ namespace SportShoes2026.Windows
             _sportServicio = sportService;
 
         }
+        public int UltimoId { get; private set; }
         public bool DataChanged { get; private set; }
         public bool ConcurrencyConflict { get; private set; }
 
@@ -54,15 +54,17 @@ namespace SportShoes2026.Windows
                     if (!_esEdicion)
                     {
 
-                        var _tipoCreateDto = new SportCreateDto();
-                        _tipoCreateDto.SportName = txtSportName.Text;
-                        var resultadoAgregar = _sportServicio.Add(_tipoCreateDto);
+                        var _sportCreateDto = new SportCreateDto();
+                        _sportCreateDto.SportName = txtSportName.Text;
+
+                        var resultadoAgregar = _sportServicio.Add(_sportCreateDto);
                         if (resultadoAgregar.IsFailure)
                         {
                             ErrorHelper.MostrarErrores(resultadoAgregar.Errors);
                             return;
                         }
                         DataChanged = true;
+                        UltimoId = resultadoAgregar.Value;
                         var respuestaAgregarOtro = MessageBox.Show("Registro agregado\n¿Desea agregar otro?",
                                 "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                                 MessageBoxDefaultButton.Button2);
@@ -82,6 +84,7 @@ namespace SportShoes2026.Windows
                         _sportUpdateDto.SportName = txtSportName.Text;
                         _sportUpdateDto.IsActive = chkActiveSport.Checked;
 
+
                         var resultadoEditar = _sportServicio
                             .Update(_sportUpdateDto);
                         if (resultadoEditar.IsConcurrencyConflict)
@@ -100,7 +103,7 @@ namespace SportShoes2026.Windows
                             return;
                         }
                         DataChanged = true;
-                        MessageBox.Show("Record successfully edited",
+                        MessageBox.Show("Registro editado satisfactoriamente",
                             "Mensaje",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                         DialogResult = DialogResult.OK;
@@ -135,9 +138,14 @@ namespace SportShoes2026.Windows
             }
             return valido;
         }
-        public void SetTipo(SportUpdateDto? tipoEditDto)
+        public void SetSport(SportUpdateDto? tipoEditDto)
         {
             _sportUpdateDto = tipoEditDto;
+        }
+
+        internal SportUpdateDto? GetSport()
+        {
+            return _sportUpdateDto;
         }
     }
 }

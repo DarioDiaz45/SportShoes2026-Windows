@@ -16,6 +16,7 @@ namespace SportShoes2026.Windows
             InitializeComponent();
             _sizeServicio = brandServicio;
         }
+        public int UltimoId { get; private set; }
         public bool DataChanged { get; private set; }
         public bool ConcurrencyConflict { get; private set; }
 
@@ -45,22 +46,24 @@ namespace SportShoes2026.Windows
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (ValidarDatos())
+             if (ValidarDatos())
             {
                 try
                 {
                     if (!_esEdicion)
                     {
 
-                        var _tipoCreateDto = new SizeCreateDto();
-                        _tipoCreateDto.Number = nudNumberSize.Value;
-                        var resultadoAgregar = _sizeServicio.Add(_tipoCreateDto);
+                        var _sizeCreateDto = new SizeCreateDto();
+                        _sizeCreateDto.Number = nudNumberSize.Value;
+                        
+                        var resultadoAgregar = _sizeServicio.Add(_sizeCreateDto);
                         if (resultadoAgregar.IsFailure)
                         {
                             ErrorHelper.MostrarErrores(resultadoAgregar.Errors);
                             return;
                         }
                         DataChanged = true;
+                        UltimoId = resultadoAgregar.Value;
                         var respuestaAgregarOtro = MessageBox.Show("Registro agregado\n¿Desea agregar otro?",
                                 "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                                 MessageBoxDefaultButton.Button2);
@@ -79,6 +82,7 @@ namespace SportShoes2026.Windows
                         }
                         _sizeUpdateDto.Number = nudNumberSize.Value;
                         _sizeUpdateDto.IsActive = chkActiveSize.Checked;
+                        _sizeUpdateDto.SizeId = _sizeUpdateDto.SizeId;
 
                         var resultadoEditar = _sizeServicio
                             .Update(_sizeUpdateDto);
@@ -98,7 +102,7 @@ namespace SportShoes2026.Windows
                             return;
                         }
                         DataChanged = true;
-                        MessageBox.Show("Record successfully edited",
+                        MessageBox.Show("Registro editado satisfactoriamente",
                             "Mensaje",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                         DialogResult = DialogResult.OK;
@@ -133,11 +137,15 @@ namespace SportShoes2026.Windows
             }
             return valido;
         }
-        public void SetTipo(SizeUpdateDto? sizeEditDto)
+        public void SetSize(SizeUpdateDto? sizeEditDto)
         {
             _sizeUpdateDto = sizeEditDto;
         }
 
-       
+        internal SizeUpdateDto? GetSize()
+        {
+            return _sizeUpdateDto;
+        }
     }
+    
 }

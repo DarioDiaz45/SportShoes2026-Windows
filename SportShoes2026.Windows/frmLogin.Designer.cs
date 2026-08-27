@@ -42,6 +42,7 @@
             // 
             // btnLogin
             // 
+            btnLogin.BackColor = SystemColors.ControlDark;
             btnLogin.Image = (Image)resources.GetObject("btnLogin.Image");
             btnLogin.Location = new Point(81, 165);
             btnLogin.Name = "btnLogin";
@@ -49,11 +50,12 @@
             btnLogin.TabIndex = 2;
             btnLogin.Text = "Login";
             btnLogin.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
             // btnSalir
             // 
+            btnSalir.BackColor = SystemColors.ControlDark;
             btnSalir.Image = (Image)resources.GetObject("btnSalir.Image");
             btnSalir.Location = new Point(305, 165);
             btnSalir.Name = "btnSalir";
@@ -61,7 +63,7 @@
             btnSalir.TabIndex = 3;
             btnSalir.Text = "Salir";
             btnSalir.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.UseVisualStyleBackColor = false;
             btnSalir.Click += btnSalir_Click;
             // 
             // lblUser
@@ -107,6 +109,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlDarkDark;
             ClientSize = new Size(485, 268);
             Controls.Add(txtPassword);
             Controls.Add(txtUser);
