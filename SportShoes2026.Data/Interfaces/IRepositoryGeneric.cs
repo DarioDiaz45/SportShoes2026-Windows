@@ -1,5 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 using SportShoes2026.Entities;
+using System.Linq.Expressions;
 
 namespace SportShoes2026.Data.Interfaces
 {
@@ -17,6 +18,11 @@ namespace SportShoes2026.Data.Interfaces
 
         void Delete(int id);
 
-       
+        (List<T> lista, int totalRegistros) ObtenerPagina(int pagina,
+            int cantidad,
+            Func<IQueryable<T>, IOrderedQueryable<T>> ordenarPor,
+            Expression<Func<T, bool>>? filtrarPor = null);
+
+
     }
 }

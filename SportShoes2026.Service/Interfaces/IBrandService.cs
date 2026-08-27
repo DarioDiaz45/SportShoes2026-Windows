@@ -5,9 +5,12 @@ namespace SportShoes2026.Service.Interfaces
 {
     public interface IBrandService
     {
+
+
+
         Result<List<BrandListDto>> GetAll();
 
-        Result Add(BrandCreateDto dto);
+        Result<int> Add(BrandCreateDto dto);
 
         Result Delete(BrandDeleteDto dto);
 
@@ -17,6 +20,11 @@ namespace SportShoes2026.Service.Interfaces
         Result Update(BrandUpdateDto dto);
 
         Result<List<BrandListDto>> FilterByAsset(bool active);
-
+        Result<PaginationResultDto<BrandListDto>> ObtenerPagina(int pagina,
+           int cantidad, string campoOrdenar, bool esAscendente,
+           bool? filtroActivo = null);
+        Result<int> ObtenerPaginaRegistro(int seleccionadoId,
+                                          int cantidadPorPagina,
+                                          bool? filtroActivo = null);
     }
 }

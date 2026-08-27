@@ -6,6 +6,7 @@ using SportShoes2026.Service.Common;
 using SportShoes2026.Service.DTOs.Brand;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Service.Mappers;
+using System.Linq.Expressions;
 
 namespace SportShoes2026.Service.Services
 {
@@ -20,36 +21,28 @@ namespace SportShoes2026.Service.Services
             _validator = validator;
         }
 
-        public Result Add(BrandCreateDto dto)
+        public Result<int> Add(BrandCreateDto dto)
         {
-            var brand = BrandMapper.ToEntity(dto);
-
-            var validation = _validator.Validate(brand);
-
-            if (!validation.IsValid)
-            {
-                return Result.Failure(
-                    validation.Errors
-                        .Select(e => e.ErrorMessage)
-                        .ToList());
-            }
-
-            if (_uow.Brands.ExistSameName(brand.BrandName))
-            {
-                return Result.Failure("Brand already exists");
-            }
-
             try
             {
+                var brand = BrandMapper.ToEntity(dto);
+                var result = _validator.Validate(brand);
+                if (!result.IsValid)
+                {
+                    return Result<int>.Failure(result.Errors.Select(e => e.ErrorMessage).ToList());
+                }
+                if (_uow.Brands.Existe(brand))
+                {
+                    return Result<int>.Failure($"Ya existe una marca {brand.BrandName}");
+                }
                 _uow.Brands.Add(brand);
-
                 _uow.Save();
-
-                return Result.Success();
+                return Result<int>.Success(brand.BrandId);
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                _uow.RollBack();
+                return Result<int>.Failure($"Error al intentar agregar un tipo de bombón: {ex.Message}");
             }
         }
 
@@ -131,6 +124,85 @@ namespace SportShoes2026.Service.Services
                 .Success(BrandMapper.ToUpdateDto(brand));
         }
 
+        public Result<PaginationResultDto<BrandListDto>> ObtenerPagina(int pagina, int cantidad, string campoOrdenar, bool esAscendente, bool? filtroActivo = null)
+        {
+            try
+            {
+                Expression<Func<Brand, bool>>? filtrarPor = null;
+                if (filtroActivo is not null)
+                {
+                    filtrarPor = b => b.Active == filtroActivo;
+                }
+
+                Func<IQueryable<Brand>, IOrderedQueryable<Brand>>? ordenarPor = null;
+                switch (campoOrdenar)
+                {
+                    case "BrandId":
+                        ordenarPor = q => esAscendente ?
+                            q.OrderBy(b => b.BrandId) :
+                            q.OrderByDescending(b => b.BrandId);
+                        break;
+                    case "Nombre":
+                    default:
+                        ordenarPor = q => esAscendente ?
+                            q.OrderBy(b => b.BrandName) :
+                            q.OrderByDescending(b => b.BrandName);
+
+                        break;
+                }
+                var resultado = _uow.Brands
+                    .ObtenerPagina(pagina, cantidad, ordenarPor,
+                        filtrarPor);
+                var listaDto = resultado.lista
+                    .Select(b => BrandMapper.ToListDto(b))
+                    .ToList();
+                var resultadoPaginado = new
+                   PaginationResultDto<BrandListDto>()
+                {
+                    Items = listaDto,
+                    CantidadRegistros = resultado.totalRegistros,
+                    CantidadPorPagina = cantidad,
+                    PaginaActual = pagina
+                };
+                return Result<PaginationResultDto<BrandListDto>>
+                    .Success(resultadoPaginado);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<PaginationResultDto<BrandListDto>>
+                    .Failure($"Error al intentar paginar: {ex.Message}");
+            }
+        }
+
+        public Result<int> ObtenerPaginaRegistro(int seleccionadoId, int cantidadPorPagina, bool? filtroActivo = null)
+        {
+            try
+            {
+                Expression<Func<Brand, bool>>? filtrarPor = null;
+                if (filtroActivo is not null)
+                {
+                    filtrarPor = b => b.Active == filtroActivo;
+                }
+                var posicion = _uow.Brands.ObtenerPosicionRegistro(seleccionadoId, filtrarPor);
+                var pagina = (int)Math.Ceiling((double)posicion / cantidadPorPagina);
+                return Result<int>.Success(pagina);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<int>
+                    .Failure($"Error al intentar obtener la pagina: {ex.Message}");
+            }
+        }
+
+
+
+
+
+
+
+
         public Result Update(BrandUpdateDto dto)
         {
             var brand = _uow.Brands.GetById(dto.BrandId);
@@ -144,7 +216,7 @@ namespace SportShoes2026.Service.Services
             brand.Country = dto.Country;
             brand.Active = dto.Active;
 
-            if (_uow.Brands.ExistSameName(brand.BrandName,brand.BrandId))
+            if (_uow.Brands.ExistSameName(brand.BrandName, brand.BrandId))
             {
                 return Result.Failure("Brand already exists");
             }

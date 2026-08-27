@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportShoes2026.Data.Interfaces;
+using System.Linq.Expressions;
 
 namespace SportShoes2026.Data.Repositories
 {
@@ -58,6 +59,23 @@ namespace SportShoes2026.Data.Repositories
             }
             _dbSet.Entry(entityInDb).CurrentValues.SetValues(entity);
 
+        }
+        public (List<T> lista, int totalRegistros) ObtenerPagina(int pagina,
+           int cantidad, Func<IQueryable<T>, IOrderedQueryable<T>> ordenarPor,
+           Expression<Func<T, bool>>? filtrarPor = null)
+        {
+
+            var query = Query();//_dbSet.AsQueryable();
+            if (filtrarPor is not null)
+            {
+                query = query.Where(filtrarPor);
+            }
+            var cantidadRegistros = query.Count();
+            var listaPaginada = ordenarPor(query)
+                .Skip((pagina - 1) * cantidad)
+                .Take(cantidad)
+                .ToList();
+            return (listaPaginada, cantidadRegistros);
         }
     }
 }
