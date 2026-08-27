@@ -1,16 +1,28 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SportShoes2026.Service.Common;
 using SportShoes2026.Service.DTOs.Brand;
-using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Windows.Helpers;
+using System.ComponentModel;
 
 namespace SportShoes2026.Windows
 {
     public partial class frmBrand : Form
     {
         private readonly IServiceProvider _serviceProvider;
-        private List<BrandListDto>? _listBrands;
-        private bool filtroActivo = false;
+        
+        private bool? filtroActivo = null;
+        private BindingSource _bindingSource = new BindingSource();
+        private int _paginaActual = 1;
+        private int _totalRegistros = 0;
+        private int _totalPaginas = 0;
+        private int _cantidadPorPagina = 10;
+
+        private string campoOrdenar = "Nombre";
+        private bool esAscendente = true;
+
+
+
         public frmBrand(IServiceProvider serviceprovider)
         {
             InitializeComponent();
@@ -31,57 +43,65 @@ namespace SportShoes2026.Windows
         {
             using (var scope = _serviceProvider.CreateScope())
             {
-                var Brandservice = scope.ServiceProvider.GetRequiredService<IBrandService>();
+                var brandServicio = scope.ServiceProvider
+                    .GetRequiredService<IBrandService>();
                 try
                 {
-                    var resultadoConsulta = Brandservice.GetAll();
+                    var resultadoConsulta = brandServicio
+                        .ObtenerPagina(_paginaActual, _cantidadPorPagina,
+                        campoOrdenar, esAscendente, filtroActivo);
                     if (resultadoConsulta.IsFailure)
                     {
-                        string errores = string.Join("\n", resultadoConsulta.Errors);
-                        MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ErrorHelper.MostrarErrores(resultadoConsulta.Errors);
                         return;
                     }
-                    _listBrands = resultadoConsulta.Value;
-                    MostrarDatosEnGrillas(_listBrands);
+
+                    MostrarDatosEnGrilla(resultadoConsulta.Value!);
                 }
                 catch (Exception ex)
                 {
 
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
             }
         }
 
-        private void MostrarDatosEnGrillas(List<BrandListDto>? listBrands)
+        private void MostrarDatosEnGrilla(PaginationResultDto<BrandListDto> resultado)
         {
-            GridHelper.LimpiarGrilla(dgvDatos);
-            if (listBrands is null || listBrands.Count == 0)
+            if (resultado.Items is null ||
+               resultado.Items.Count == 0) return;
+
+            _totalPaginas = resultado.TotalPaginas;
+            _totalRegistros = resultado.CantidadRegistros;
+
+            _bindingSource.DataSource = resultado.Items;
+            dgvDatos.DataSource = _bindingSource;
+
+            int desde = 1 + (_paginaActual - 1) * _cantidadPorPagina;
+            int hasta = desde + _cantidadPorPagina - 1;
+            if (hasta > _totalRegistros)
             {
-                return;
+                hasta = _totalRegistros;
             }
-            foreach (var item in listBrands)
-            {
-                var r = GridHelper.ConstruirFila(dgvDatos);
-                GridHelper.SetearFila(r, item);
-                GridHelper.AgregarFila(r, dgvDatos);
-            }
-            lblCantidad.Text = listBrands.Count.ToString();
+            lblCantidad.Text = $"Del {desde} a {hasta} de {_totalRegistros}";
+            lblPaginas.Text = $"{_paginaActual} de {_totalPaginas}";
+
+            btnPrimero.Enabled = resultado.TieneRegistrosAnteriores;
+            btnAnterior.Enabled = resultado.TieneRegistrosAnteriores;
+            btnSiguiente.Enabled = resultado.TieneRegistrosSiguientes;
+            btnUltimo.Enabled = resultado.TieneRegistrosSiguientes;
         }
+
+
 
         private void tsbDelete_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
                 MessageBox.Show("Debe seleccionar un registro", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null)
-            {
-                return;
-            }
-            BrandListDto brandSeleccionado = (BrandListDto)filaSeleccionada.Tag;
+            BrandListDto brandSeleccionado = (BrandListDto)_bindingSource.Current;
             using (var scope = _serviceProvider.CreateScope())
             {
                 var brandService = scope.ServiceProvider.GetRequiredService<IBrandService>();
@@ -129,29 +149,10 @@ namespace SportShoes2026.Windows
 
         private void activeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var Brandservice = scope.ServiceProvider.GetRequiredService<IBrandService>();
-                try
-                {
-                    var resultadoConsulta = Brandservice.FilterByAsset(true);
-                    if (resultadoConsulta.IsFailure)
-                    {
-                        string errores = string.Join("\n", resultadoConsulta.Errors);
-                        MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    _listBrands = resultadoConsulta.Value;
-                    MostrarDatosEnGrillas(_listBrands);
-                    ManejarControles(true);
-                }
-                catch (Exception ex)
-                {
-
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-            }
+            filtroActivo = true;
+            _paginaActual = 1;
+            tsbFilter.BackColor = Color.Orange;
+            RecargarGrilla();
         }
 
         private void ManejarControles(bool v)
@@ -166,29 +167,10 @@ namespace SportShoes2026.Windows
 
         private void noActiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var Brandservice = scope.ServiceProvider.GetRequiredService<IBrandService>();
-                try
-                {
-                    var resultadoConsulta = Brandservice.FilterByAsset(false);
-                    if (resultadoConsulta.IsFailure)
-                    {
-                        string errores = string.Join("\n", resultadoConsulta.Errors);
-                        MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    _listBrands = resultadoConsulta.Value;
-                    MostrarDatosEnGrillas(_listBrands);
-                    ManejarControles(true);
-                }
-                catch (Exception ex)
-                {
-
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-            }
+            filtroActivo = false;
+            _paginaActual = 1;
+            tsbFilter.BackColor = Color.Orange;
+            RecargarGrilla();
         }
 
         private void tsbUpdate_Click(object sender, EventArgs e)
@@ -207,30 +189,62 @@ namespace SportShoes2026.Windows
                     frm.ShowDialog();
                     if (frm.DataChanged)
                     {
+                        var nuevoId = frm.UltimoId;
+                        bool sePuedeVer = filtroActivo is null || filtroActivo == true;
+                        if (sePuedeVer)
+                        {
+                            var tipoServicio = scope.ServiceProvider
+                                .GetRequiredService<IBrandService>();
+                            var resultado = tipoServicio.ObtenerPaginaRegistro(nuevoId, _cantidadPorPagina);
+                            if (resultado.IsFailure)
+                            {
+                                ErrorHelper.MostrarErrores(resultado.Errors);
+                                return;
+                            }
+                            _paginaActual = resultado.Value;
+                        }
                         RecargarGrilla();
-                    }
+                        if (sePuedeVer)
+                        {
+                            var nuevoTipo = _bindingSource.List
+                                .Cast<BrandListDto>()
+                                .FirstOrDefault(tp => tp.BrandId == nuevoId);
+                            if (nuevoTipo is null) return;
+                            _bindingSource.Position = _bindingSource.IndexOf(nuevoTipo);
 
+                        }
+                        else
+                        {
+                            MessageBox.Show("Los registros agregados no se pueden mostrar\npor condición de filtro o búsqueda",
+                                "Advertencia",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
                 }
             }
         }
 
+
+
+
+
+
         private void tsbEdit_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
                 MessageBox.Show("Debe seleccionar una fila de la grilla",
                     "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null) return;
-            var brandListDto = (BrandListDto)filaSeleccionada.Tag;
+            var brandListDto = (BrandListDto)_bindingSource.Current;
+            var seleccionadoId = brandListDto.BrandId;
             using (var scope = _serviceProvider.CreateScope())
             {
                 try
                 {
                     var brandServicio = scope.ServiceProvider
-                     .GetRequiredService<IBrandService>();
+                .GetRequiredService<IBrandService>();
                     var resultadoConsulta = brandServicio
                         .GetForUpdate(brandListDto.BrandId);
                     if (resultadoConsulta.IsFailure)
@@ -238,13 +252,31 @@ namespace SportShoes2026.Windows
                         ErrorHelper.MostrarErrores(resultadoConsulta.Errors);
                         return;
                     }
-                    var brandEditDto = resultadoConsulta.Value;
+                    var brandUpdateDto = resultadoConsulta.Value;
                     using (frmBrandAe frm = scope.ServiceProvider
                         .GetRequiredService<frmBrandAe>())
                     {
-                        frm.Text = "Editar Tipo de Bombón";
-                        frm.SetTipo(brandEditDto);
+                        frm.Text = "Editar Marca";
+                        frm.SetBrand(brandUpdateDto);
                         frm.ShowDialog();
+                        var brandEditado = frm.GetBrand();
+                        if (brandEditado is null) return;
+                        bool sePuedeVer = filtroActivo is null ||
+                            filtroActivo == brandEditado.Active;
+
+                        if (sePuedeVer)
+                        {
+                            var resultadoPagina = brandServicio
+                                .ObtenerPaginaRegistro(seleccionadoId, _cantidadPorPagina,
+                                filtroActivo);
+                            if (resultadoConsulta.IsFailure)
+                            {
+                                ErrorHelper.MostrarErrores(resultadoPagina.Errors);
+                                return;
+                            }
+                            _paginaActual = resultadoPagina.Value;
+                        }
+
                         if (frm.ConcurrencyConflict)
                         {
                             RecargarGrilla();
@@ -253,7 +285,22 @@ namespace SportShoes2026.Windows
                         {
                             RecargarGrilla();
                         }
+                        if (sePuedeVer)
+                        {
+                            var registroEditado = _bindingSource.List
+                                .Cast<BrandListDto>()
+                                .FirstOrDefault(b => b.BrandId == seleccionadoId);
+                            if (registroEditado is null) return;
+                            _bindingSource.Position = _bindingSource.IndexOf(registroEditado);
 
+                        }
+                        else
+                        {
+                            MessageBox.Show("El registro editado no se puede mostrar\npor condición de filtro o búsqueda",
+                                "Advertencia",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        }
                     }
 
                 }
@@ -265,5 +312,38 @@ namespace SportShoes2026.Windows
                 }
             }
         }
+
+        private void btnPrimero_Click(object sender, EventArgs e)
+        {
+            _paginaActual = 1;
+            RecargarGrilla();
+        }
+
+        private void btnAnterior_Click(object sender, EventArgs e)
+        {
+            _paginaActual--;
+            if (_paginaActual == 0)
+            {
+                _paginaActual = 1;
+            }
+            RecargarGrilla();
+        }
+
+        private void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            _paginaActual++;
+            if (_paginaActual > _totalPaginas)
+            {
+                _paginaActual = _totalPaginas;
+            }
+            RecargarGrilla();
+        }
+
+        private void btnUltimo_Click(object sender, EventArgs e)
+        {
+            _paginaActual = _totalPaginas;
+            RecargarGrilla();
+        }
     }
 }
+

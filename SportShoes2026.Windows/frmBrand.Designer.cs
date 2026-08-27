@@ -42,6 +42,12 @@
             toolStripSeparator2 = new ToolStripSeparator();
             tsbClose = new ToolStripButton();
             pnlCantidad = new Panel();
+            btnPrimero = new Button();
+            btnAnterior = new Button();
+            btnSiguiente = new Button();
+            btnUltimo = new Button();
+            lblPaginas = new Label();
+            label2 = new Label();
             lblCantidad = new Label();
             label1 = new Label();
             pnlGrid = new Panel();
@@ -167,18 +173,85 @@
             // 
             // pnlCantidad
             // 
+            pnlCantidad.Controls.Add(btnPrimero);
+            pnlCantidad.Controls.Add(btnAnterior);
+            pnlCantidad.Controls.Add(btnSiguiente);
+            pnlCantidad.Controls.Add(btnUltimo);
+            pnlCantidad.Controls.Add(lblPaginas);
+            pnlCantidad.Controls.Add(label2);
             pnlCantidad.Controls.Add(lblCantidad);
             pnlCantidad.Controls.Add(label1);
             pnlCantidad.Dock = DockStyle.Bottom;
-            pnlCantidad.Location = new Point(0, 400);
+            pnlCantidad.Location = new Point(0, 386);
             pnlCantidad.Name = "pnlCantidad";
-            pnlCantidad.Size = new Size(799, 50);
+            pnlCantidad.Size = new Size(799, 64);
             pnlCantidad.TabIndex = 1;
+            // 
+            // btnPrimero
+            // 
+            btnPrimero.Image = (Image)resources.GetObject("btnPrimero.Image");
+            btnPrimero.Location = new Point(528, 23);
+            btnPrimero.Name = "btnPrimero";
+            btnPrimero.Size = new Size(44, 32);
+            btnPrimero.TabIndex = 7;
+            btnPrimero.UseVisualStyleBackColor = true;
+            btnPrimero.Click += btnPrimero_Click;
+            // 
+            // btnAnterior
+            // 
+            btnAnterior.Image = (Image)resources.GetObject("btnAnterior.Image");
+            btnAnterior.ImageAlign = ContentAlignment.BottomCenter;
+            btnAnterior.Location = new Point(569, 23);
+            btnAnterior.Name = "btnAnterior";
+            btnAnterior.Size = new Size(44, 32);
+            btnAnterior.TabIndex = 6;
+            btnAnterior.UseVisualStyleBackColor = true;
+            btnAnterior.Click += btnAnterior_Click;
+            // 
+            // btnSiguiente
+            // 
+            btnSiguiente.Image = Properties.Resources.Right_Button;
+            btnSiguiente.Location = new Point(619, 23);
+            btnSiguiente.Name = "btnSiguiente";
+            btnSiguiente.Size = new Size(44, 33);
+            btnSiguiente.TabIndex = 5;
+            btnSiguiente.UseVisualStyleBackColor = true;
+            btnSiguiente.Click += btnSiguiente_Click;
+            // 
+            // btnUltimo
+            // 
+            btnUltimo.Image = (Image)resources.GetObject("btnUltimo.Image");
+            btnUltimo.Location = new Point(669, 23);
+            btnUltimo.Name = "btnUltimo";
+            btnUltimo.Size = new Size(44, 33);
+            btnUltimo.TabIndex = 4;
+            btnUltimo.UseVisualStyleBackColor = true;
+            btnUltimo.Click += btnUltimo_Click;
+            // 
+            // lblPaginas
+            // 
+            lblPaginas.AutoSize = true;
+            lblPaginas.Location = new Point(133, 41);
+            lblPaginas.Name = "lblPaginas";
+            lblPaginas.Size = new Size(13, 15);
+            lblPaginas.TabIndex = 3;
+            lblPaginas.Text = "0";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 40);
+            label2.Name = "label2";
+            label2.Size = new Size(118, 15);
+            label2.TabIndex = 2;
+            label2.Text = "Cantidad de Paginas:";
             // 
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.Location = new Point(76, 16);
+            lblCantidad.BackColor = SystemColors.ButtonFace;
+            lblCantidad.ForeColor = SystemColors.ControlText;
+            lblCantidad.Location = new Point(134, 16);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(13, 15);
             lblCantidad.TabIndex = 1;
@@ -189,9 +262,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(12, 16);
             label1.Name = "label1";
-            label1.Size = new Size(58, 15);
+            label1.Size = new Size(125, 15);
             label1.TabIndex = 0;
-            label1.Text = "Cantidad:";
+            label1.Text = "Cantidad de Registros:";
             // 
             // pnlGrid
             // 
@@ -199,40 +272,53 @@
             pnlGrid.Dock = DockStyle.Fill;
             pnlGrid.Location = new Point(0, 71);
             pnlGrid.Name = "pnlGrid";
-            pnlGrid.Size = new Size(799, 329);
+            pnlGrid.Size = new Size(799, 315);
             pnlGrid.TabIndex = 2;
             // 
             // dgvDatos
             // 
+            dgvDatos.AllowUserToAddRows = false;
+            dgvDatos.AllowUserToDeleteRows = false;
+            dgvDatos.BackgroundColor = SystemColors.ActiveCaption;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colBrandId, ColBrandName, colCountry, colActive });
             dgvDatos.Dock = DockStyle.Fill;
             dgvDatos.Location = new Point(0, 0);
             dgvDatos.Name = "dgvDatos";
-            dgvDatos.Size = new Size(799, 329);
+            dgvDatos.ReadOnly = true;
+            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvDatos.Size = new Size(799, 315);
             dgvDatos.TabIndex = 0;
             // 
             // colBrandId
             // 
+            colBrandId.DataPropertyName = "BrandId";
             colBrandId.HeaderText = "Id";
             colBrandId.Name = "colBrandId";
+            colBrandId.ReadOnly = true;
             colBrandId.Visible = false;
             // 
             // ColBrandName
             // 
             ColBrandName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            ColBrandName.DataPropertyName = "BrandName";
             ColBrandName.HeaderText = "Name";
             ColBrandName.Name = "ColBrandName";
+            ColBrandName.ReadOnly = true;
             // 
             // colCountry
             // 
+            colCountry.DataPropertyName = "Country";
             colCountry.HeaderText = "Country";
             colCountry.Name = "colCountry";
+            colCountry.ReadOnly = true;
             // 
             // colActive
             // 
+            colActive.DataPropertyName = "IsActive";
             colActive.HeaderText = "Active";
             colActive.Name = "colActive";
+            colActive.ReadOnly = true;
             // 
             // frmBrand
             // 
@@ -279,5 +365,11 @@
         private DataGridViewTextBoxColumn ColBrandName;
         private DataGridViewTextBoxColumn colCountry;
         private DataGridViewCheckBoxColumn colActive;
+        private Button btnUltimo;
+        private Label lblPaginas;
+        private Label label2;
+        private Button btnSiguiente;
+        private Button btnAnterior;
+        private Button btnPrimero;
     }
 }

@@ -200,11 +200,13 @@
             dgvDatos.Location = new Point(0, 77);
             dgvDatos.Name = "dgvDatos";
             dgvDatos.ReadOnly = true;
+            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(800, 347);
             dgvDatos.TabIndex = 2;
             // 
             // colIdSize
             // 
+            colIdSize.DataPropertyName = "SizeId";
             colIdSize.HeaderText = "Id";
             colIdSize.Name = "colIdSize";
             colIdSize.ReadOnly = true;
@@ -213,12 +215,14 @@
             // colNumber
             // 
             colNumber.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colNumber.DataPropertyName = "Number";
             colNumber.HeaderText = "Number";
             colNumber.Name = "colNumber";
             colNumber.ReadOnly = true;
             // 
             // colActive
             // 
+            colActive.DataPropertyName = "IsActive";
             colActive.HeaderText = "Active";
             colActive.Name = "colActive";
             colActive.ReadOnly = true;
@@ -257,13 +261,13 @@
         private Label lblCantidad;
         private Label label1;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colIdSize;
-        private DataGridViewTextBoxColumn colNumber;
-        private DataGridViewCheckBoxColumn colActive;
         private ToolStripDropDownButton tsbFilter;
         private ToolStripMenuItem activeToolStripMenuItem;
         private ToolStripMenuItem noActiveToolStripMenuItem;
         private ToolStripButton tsbNew;
         private ToolStripButton tsbDelete;
+        private DataGridViewTextBoxColumn colIdSize;
+        private DataGridViewTextBoxColumn colNumber;
+        private DataGridViewCheckBoxColumn colActive;
     }
 }

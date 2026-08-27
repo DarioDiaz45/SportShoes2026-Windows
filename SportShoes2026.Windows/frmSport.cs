@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SportShoes2026.Service.DTOs.Brand;
 using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Windows.Helpers;
+using System.ComponentModel;
 
 namespace SportShoes2026.Windows
 {
@@ -11,6 +11,8 @@ namespace SportShoes2026.Windows
         private readonly IServiceProvider _serviceProvider;
         private List<SportListDto>? _listSports;
         private bool filtroActivo = false;
+
+        private BindingSource _bindingSource = new BindingSource();
         public frmSport(IServiceProvider serviceProvider)
         {
             InitializeComponent();
@@ -55,17 +57,15 @@ namespace SportShoes2026.Windows
 
         private void MostrarDatosEnGrillas(List<SportListDto>? listSports)
         {
-            GridHelper.LimpiarGrilla(dgvDatos);
+           
             if (listSports is null || listSports.Count == 0)
             {
                 return;
             }
-            foreach (var item in listSports)
-            {
-                var r = GridHelper.ConstruirFila(dgvDatos);
-                GridHelper.SetearFila(r, item);
-                GridHelper.AgregarFila(r, dgvDatos);
-            }
+            
+            var bindingList=new BindingList<SportListDto>(listSports);
+            _bindingSource.DataSource = bindingList;
+            dgvDatos.DataSource = _bindingSource;
             lblCantidad.Text = listSports.Count.ToString();
         }
 
@@ -100,7 +100,6 @@ namespace SportShoes2026.Windows
         {
             filtroActivo = v;
             tsbFilter.BackColor = v ? Color.Orange : SystemColors.Control;
-
             tsbNew.Enabled = !v;
             tsbDelete.Enabled = !v;
             tsbEdit.Enabled = !v;
@@ -141,17 +140,12 @@ namespace SportShoes2026.Windows
 
         private void tsbDelete_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current==null)
             {
                 MessageBox.Show("Debe seleccionar un registro", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null)
-            {
-                return;
-            }
-            SportListDto sportSeleccionado = (SportListDto)filaSeleccionada.Tag;
+            SportListDto sportSeleccionado = (SportListDto)_bindingSource.Current;
             using (var scope = _serviceProvider.CreateScope())
             {
                 var sportService = scope.ServiceProvider.GetRequiredService<ISportService>();
@@ -217,15 +211,12 @@ namespace SportShoes2026.Windows
         private void tsbEdit_Click(object sender, EventArgs e)
         {
 
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
-                MessageBox.Show("Debe seleccionar una fila de la grilla",
-                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Debe seleccionar un registro", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null) return;
-            var sportListDto = (SportListDto)filaSeleccionada.Tag;
+            SportListDto sportListDto = (SportListDto)_bindingSource.Current;
             using (var scope = _serviceProvider.CreateScope())
             {
                 try

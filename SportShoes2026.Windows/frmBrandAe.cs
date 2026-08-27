@@ -14,7 +14,7 @@ namespace SportShoes2026.Windows
             InitializeComponent();
             _brandServicio = brandServicio;
         }
-
+        public int UltimoId { get; private set; }
         public bool DataChanged { get; private set; }
         public bool ConcurrencyConflict { get; private set; }
 
@@ -51,16 +51,17 @@ namespace SportShoes2026.Windows
                     if (!_esEdicion)
                     {
 
-                        var _tipoCreateDto = new BrandCreateDto();
-                        _tipoCreateDto.BrandName = txtNameBrand.Text;
-                        _tipoCreateDto.Country = txtCountry.Text;
-                        var resultadoAgregar = _brandServicio.Add(_tipoCreateDto);
+                        var _brandCreateDto = new BrandCreateDto();
+                        _brandCreateDto.BrandName = txtNameBrand.Text;
+                        _brandCreateDto.Country = txtCountry.Text;
+                        var resultadoAgregar = _brandServicio.Add(_brandCreateDto);
                         if (resultadoAgregar.IsFailure)
                         {
                             ErrorHelper.MostrarErrores(resultadoAgregar.Errors);
                             return;
                         }
                         DataChanged = true;
+                        UltimoId = resultadoAgregar.Value;
                         var respuestaAgregarOtro = MessageBox.Show("Registro agregado\n¿Desea agregar otro?",
                                 "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                                 MessageBoxDefaultButton.Button2);
@@ -99,7 +100,7 @@ namespace SportShoes2026.Windows
                             return;
                         }
                         DataChanged = true;
-                        MessageBox.Show("Record successfully edited",
+                        MessageBox.Show("Registro editado satisfactoriamente",
                             "Mensaje",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                         DialogResult = DialogResult.OK;
@@ -141,9 +142,14 @@ namespace SportShoes2026.Windows
             return valido;
         }
 
-        public void SetTipo(BrandUpdateDto? tipoEditDto)
+        public void SetBrand(BrandUpdateDto? brandUpdateDto)
         {
-            _brandUpdateDto = tipoEditDto;
+            _brandUpdateDto = brandUpdateDto;
+        }
+
+        public BrandUpdateDto? GetBrand()
+        {
+            return _brandUpdateDto;
         }
     }
 }

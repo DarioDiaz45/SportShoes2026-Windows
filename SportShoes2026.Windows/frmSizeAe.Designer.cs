@@ -43,6 +43,7 @@
             // lblNumber
             // 
             lblNumber.AutoSize = true;
+            lblNumber.BackColor = SystemColors.ControlDarkDark;
             lblNumber.Location = new Point(38, 25);
             lblNumber.Name = "lblNumber";
             lblNumber.Size = new Size(54, 15);
@@ -52,15 +53,17 @@
             // chkActiveSize
             // 
             chkActiveSize.AutoSize = true;
+            chkActiveSize.BackColor = SystemColors.ControlDarkDark;
             chkActiveSize.Location = new Point(38, 73);
             chkActiveSize.Name = "chkActiveSize";
             chkActiveSize.Size = new Size(64, 19);
             chkActiveSize.TabIndex = 2;
             chkActiveSize.Text = "Active?";
-            chkActiveSize.UseVisualStyleBackColor = true;
+            chkActiveSize.UseVisualStyleBackColor = false;
             // 
             // btnOK
             // 
+            btnOK.BackColor = SystemColors.ControlDark;
             btnOK.Image = (Image)resources.GetObject("btnOK.Image");
             btnOK.Location = new Point(38, 163);
             btnOK.Name = "btnOK";
@@ -68,11 +71,12 @@
             btnOK.TabIndex = 3;
             btnOK.Text = "OK";
             btnOK.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnOK.UseVisualStyleBackColor = true;
+            btnOK.UseVisualStyleBackColor = false;
             btnOK.Click += btnOK_Click;
             // 
             // btnCancel
             // 
+            btnCancel.BackColor = SystemColors.ControlDark;
             btnCancel.Image = (Image)resources.GetObject("btnCancel.Image");
             btnCancel.Location = new Point(203, 163);
             btnCancel.Name = "btnCancel";
@@ -80,7 +84,7 @@
             btnCancel.TabIndex = 4;
             btnCancel.Text = "Cancel";
             btnCancel.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
             // errorProvider1
@@ -89,6 +93,7 @@
             // 
             // nudNumberSize
             // 
+            nudNumberSize.BackColor = SystemColors.ControlDark;
             nudNumberSize.Location = new Point(98, 23);
             nudNumberSize.Name = "nudNumberSize";
             nudNumberSize.Size = new Size(97, 23);
@@ -98,12 +103,14 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlDarkDark;
             ClientSize = new Size(332, 251);
             Controls.Add(nudNumberSize);
             Controls.Add(btnCancel);
             Controls.Add(btnOK);
             Controls.Add(chkActiveSize);
             Controls.Add(lblNumber);
+            ForeColor = SystemColors.ActiveCaptionText;
             Name = "frmSizeAe";
             Text = "frmSizeAe";
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();

@@ -1,6 +1,6 @@
 ﻿namespace SportShoes2026.Service.Common
 {
-    public class Result<T> where T : class
+    public class Result<T>
     {
         public bool IsSuccess { get; }
 
@@ -10,7 +10,7 @@
 
         public List<string> Errors { get; }
 
-        private Result(bool success, List<string> errors, T? value = null)
+        private Result(bool success, List<string> errors, T? value = default)
         {
             IsSuccess = success;
             Errors = errors;

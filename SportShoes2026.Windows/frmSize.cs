@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SportShoes2026.Service.DTOs.Size;
+using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Windows.Helpers;
+using System.ComponentModel;
 
 namespace SportShoes2026.Windows
 {
@@ -10,6 +12,7 @@ namespace SportShoes2026.Windows
         private readonly IServiceProvider _serviceProvider;
         private List<SizeListDto>? _listSizes;
         private bool filtroActivo = false;
+        private BindingSource _bindingSource = new BindingSource();
         public frmSize(IServiceProvider serviceProvider)
         {
             InitializeComponent();
@@ -53,17 +56,14 @@ namespace SportShoes2026.Windows
 
         private void MostrarDatosEnGrillas(List<SizeListDto>? listSizes)
         {
-            GridHelper.LimpiarGrilla(dgvDatos);
+            
             if (listSizes is null || listSizes.Count == 0)
             {
                 return;
             }
-            foreach (var item in listSizes)
-            {
-                var r = GridHelper.ConstruirFila(dgvDatos);
-                GridHelper.SetearFila(r, item);
-                GridHelper.AgregarFila(r, dgvDatos);
-            }
+            var bindingList = new BindingList<SizeListDto>(listSizes);
+            _bindingSource.DataSource = bindingList;
+            dgvDatos.DataSource = _bindingSource;
             lblCantidad.Text = listSizes.Count.ToString();
         }
 
@@ -154,15 +154,13 @@ namespace SportShoes2026.Windows
 
         private void tsbEdit_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
                 MessageBox.Show("You must select a row from the grid.",
                     "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null) return;
-            var sizeListDto = (SizeListDto)filaSeleccionada.Tag;
+            SizeListDto sizeListDto = (SizeListDto)_bindingSource.Current;
             using (var scope = _serviceProvider.CreateScope())
             {
                 try
@@ -205,17 +203,12 @@ namespace SportShoes2026.Windows
 
         private void tsbDelete_Click_1(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
                 MessageBox.Show("Debe seleccionar un registro", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var filaSeleccionada = dgvDatos.SelectedRows[0];
-            if (filaSeleccionada.Tag is null)
-            {
-                return;
-            }
-            SizeListDto sizeSeleccionado = (SizeListDto)filaSeleccionada.Tag;
+            SizeListDto sizeSeleccionado = (SizeListDto)_bindingSource.Current;
             using (var scope = _serviceProvider.CreateScope())
             {
                 var sizeService = scope.ServiceProvider.GetRequiredService<ISizeService>();
