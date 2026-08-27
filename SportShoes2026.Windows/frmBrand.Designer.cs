@@ -74,6 +74,7 @@
             // 
             // toolStrip1
             // 
+            toolStrip1.BackColor = SystemColors.ControlDark;
             toolStrip1.Items.AddRange(new ToolStripItem[] { tsbNew, tsbDelete, tsbEdit, toolStripSeparator1, tsbFilter, tsbUpdate, toolStripSeparator2, tsbClose });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
@@ -173,6 +174,7 @@
             // 
             // pnlCantidad
             // 
+            pnlCantidad.BackColor = SystemColors.ControlDark;
             pnlCantidad.Controls.Add(btnPrimero);
             pnlCantidad.Controls.Add(btnAnterior);
             pnlCantidad.Controls.Add(btnSiguiente);
@@ -189,43 +191,47 @@
             // 
             // btnPrimero
             // 
+            btnPrimero.BackColor = SystemColors.ControlDark;
             btnPrimero.Image = (Image)resources.GetObject("btnPrimero.Image");
             btnPrimero.Location = new Point(528, 23);
             btnPrimero.Name = "btnPrimero";
             btnPrimero.Size = new Size(44, 32);
             btnPrimero.TabIndex = 7;
-            btnPrimero.UseVisualStyleBackColor = true;
+            btnPrimero.UseVisualStyleBackColor = false;
             btnPrimero.Click += btnPrimero_Click;
             // 
             // btnAnterior
             // 
+            btnAnterior.BackColor = SystemColors.ControlDark;
             btnAnterior.Image = (Image)resources.GetObject("btnAnterior.Image");
             btnAnterior.ImageAlign = ContentAlignment.BottomCenter;
             btnAnterior.Location = new Point(569, 23);
             btnAnterior.Name = "btnAnterior";
             btnAnterior.Size = new Size(44, 32);
             btnAnterior.TabIndex = 6;
-            btnAnterior.UseVisualStyleBackColor = true;
+            btnAnterior.UseVisualStyleBackColor = false;
             btnAnterior.Click += btnAnterior_Click;
             // 
             // btnSiguiente
             // 
+            btnSiguiente.BackColor = SystemColors.ControlDark;
             btnSiguiente.Image = Properties.Resources.Right_Button;
             btnSiguiente.Location = new Point(619, 23);
             btnSiguiente.Name = "btnSiguiente";
             btnSiguiente.Size = new Size(44, 33);
             btnSiguiente.TabIndex = 5;
-            btnSiguiente.UseVisualStyleBackColor = true;
+            btnSiguiente.UseVisualStyleBackColor = false;
             btnSiguiente.Click += btnSiguiente_Click;
             // 
             // btnUltimo
             // 
+            btnUltimo.BackColor = SystemColors.ControlDark;
             btnUltimo.Image = (Image)resources.GetObject("btnUltimo.Image");
             btnUltimo.Location = new Point(669, 23);
             btnUltimo.Name = "btnUltimo";
             btnUltimo.Size = new Size(44, 33);
             btnUltimo.TabIndex = 4;
-            btnUltimo.UseVisualStyleBackColor = true;
+            btnUltimo.UseVisualStyleBackColor = false;
             btnUltimo.Click += btnUltimo_Click;
             // 
             // lblPaginas
@@ -249,7 +255,7 @@
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.BackColor = SystemColors.ButtonFace;
+            lblCantidad.BackColor = SystemColors.ButtonShadow;
             lblCantidad.ForeColor = SystemColors.ControlText;
             lblCantidad.Location = new Point(134, 16);
             lblCantidad.Name = "lblCantidad";
@@ -279,7 +285,7 @@
             // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
-            dgvDatos.BackgroundColor = SystemColors.ActiveCaption;
+            dgvDatos.BackgroundColor = SystemColors.ControlDarkDark;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colBrandId, ColBrandName, colCountry, colActive });
             dgvDatos.Dock = DockStyle.Fill;

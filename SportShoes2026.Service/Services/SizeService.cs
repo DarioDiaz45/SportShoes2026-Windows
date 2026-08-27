@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using SportShoes2026.Data;
 using SportShoes2026.Entities;
 using SportShoes2026.Service.Common;
+using SportShoes2026.Service.DTOs.Brand;
 using SportShoes2026.Service.DTOs.Size;
 using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Service.Mappers;
+using System.Linq.Expressions;
 
 namespace SportShoes2026.Service.Services
 {
@@ -98,34 +100,28 @@ namespace SportShoes2026.Service.Services
                 return Result.Failure(ex.Message);
             }
         }
-        public Result Add(SizeCreateDto dto)
+        public Result <int>Add(SizeCreateDto dto)
         {
-            var size = SizeMapper.ToEntity(dto);
-
-            var validation = _validator.Validate(size);
-
-            if (!validation.IsValid)
-            {
-                return Result.Failure(
-                    validation.Errors.Select(e => e.ErrorMessage).ToList());
-            }
-
-            if (_uow.Sizes.ExistSameNumber(size.SizeNumber))
-            {
-                return Result.Failure("Sport already exists");
-            }
-
             try
             {
+                var size = SizeMapper.ToEntity(dto);
+                var result = _validator.Validate(size);
+                if (!result.IsValid)
+                {
+                    return Result<int>.Failure(result.Errors.Select(e => e.ErrorMessage).ToList());
+                }
+                if (_uow.Sizes.ExistSameNumber(size.SizeNumber))
+                {
+                    return Result<int>.Failure($"Ya existe un tamaño {size.SizeNumber}");
+                }
                 _uow.Sizes.Add(size);
-
                 _uow.Save();
-
-                return Result.Success();
+                return Result<int>.Success(size.SizeId);
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                _uow.RollBack();
+                return Result<int>.Failure($"Error al intentar agregar un tipo de bombón: {ex.Message}");
             }
         }
         public Result Delete(SizeDeleteDto sizeDeleteDto)
@@ -166,6 +162,76 @@ namespace SportShoes2026.Service.Services
             return Result<SizeDeleteDto>.Success(SizeMapper.ToDeleteDto(size));
         }
 
-       
+        public Result<PaginationResultDto<SizeListDto>> ObtenerPagina(int pagina, int cantidad, string campoOrdenar, bool esAscendente, bool? filtroActivo = null)
+        {
+            try
+            {
+                Expression<Func<SiZe, bool>>? filtrarPor = null;
+                if (filtroActivo is not null)
+                {
+                    filtrarPor = b => b.Active == filtroActivo;
+                }
+
+                Func<IQueryable<SiZe>, IOrderedQueryable<SiZe>>? ordenarPor = null;
+                switch (campoOrdenar)
+                {
+                    case "SizeId":
+                        ordenarPor = q => esAscendente ?
+                            q.OrderBy(b => b.SizeId) :
+                            q.OrderByDescending(b => b.SizeId);
+                        break;
+                    case "Number":
+                    default:
+                        ordenarPor = q => esAscendente ?
+                            q.OrderBy(b => b.SizeNumber) :
+                            q.OrderByDescending(b => b.SizeNumber);
+
+                        break;
+                }
+                var resultado = _uow.Sizes
+                    .ObtenerPagina(pagina, cantidad, ordenarPor,
+                        filtrarPor);
+                var listaDto = resultado.lista
+                    .Select(b => SizeMapper.ToListDto(b))
+                    .ToList();
+                var resultadoPaginado = new
+                   PaginationResultDto<SizeListDto>()
+                {
+                    Items = listaDto,
+                    CantidadRegistros = resultado.totalRegistros,
+                    CantidadPorPagina = cantidad,
+                    PaginaActual = pagina
+                };
+                return Result<PaginationResultDto<SizeListDto>>
+                    .Success(resultadoPaginado);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<PaginationResultDto<SizeListDto>>
+                    .Failure($"Error al intentar paginar: {ex.Message}");
+            }
+        }
+
+        public Result<int> ObtenerPaginaRegistro(int seleccionadoId, int cantidadPorPagina, bool? filtroActivo = null)
+        {
+            try
+            {
+                Expression<Func<SiZe, bool>>? filtrarPor = null;
+                if (filtroActivo is not null)
+                {
+                    filtrarPor = b => b.Active == filtroActivo;
+                }
+                var posicion = _uow.Sizes.ObtenerPosicionRegistro(seleccionadoId, filtrarPor);
+                var pagina = (int)Math.Ceiling((double)posicion / cantidadPorPagina);
+                return Result<int>.Success(pagina);
+            }
+            catch (Exception ex)
+            {
+
+                return Result<int>
+                    .Failure($"Error al intentar obtener la pagina: {ex.Message}");
+            }
+        }
     }
 }

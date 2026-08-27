@@ -69,6 +69,7 @@
             // 
             // btnOK
             // 
+            btnOK.BackColor = SystemColors.ControlDark;
             btnOK.Image = (Image)resources.GetObject("btnOK.Image");
             btnOK.Location = new Point(64, 142);
             btnOK.Name = "btnOK";
@@ -76,11 +77,12 @@
             btnOK.TabIndex = 3;
             btnOK.Text = "OK";
             btnOK.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnOK.UseVisualStyleBackColor = true;
+            btnOK.UseVisualStyleBackColor = false;
             btnOK.Click += btnOK_Click;
             // 
             // btnCancelar
             // 
+            btnCancelar.BackColor = SystemColors.ControlDark;
             btnCancelar.Image = (Image)resources.GetObject("btnCancelar.Image");
             btnCancelar.Location = new Point(357, 142);
             btnCancelar.Name = "btnCancelar";
@@ -88,7 +90,7 @@
             btnCancelar.TabIndex = 4;
             btnCancelar.Text = "Cancelar";
             btnCancelar.TextImageRelation = TextImageRelation.ImageAboveText;
-            btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.UseVisualStyleBackColor = false;
             btnCancelar.Click += btnCancelar_Click;
             // 
             // errorProvider1
@@ -115,6 +117,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlDarkDark;
             ClientSize = new Size(508, 230);
             Controls.Add(txtCountry);
             Controls.Add(lblCountry);
@@ -123,6 +126,8 @@
             Controls.Add(txtNameBrand);
             Controls.Add(chkActive);
             Controls.Add(lblName);
+            DoubleBuffered = true;
+            ForeColor = SystemColors.ControlText;
             Name = "frmBrandAe";
             Text = "frmBrandAe";
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();

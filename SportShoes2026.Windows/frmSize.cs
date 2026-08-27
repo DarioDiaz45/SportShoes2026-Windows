@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SportShoes2026.Service.Common;
+using SportShoes2026.Service.DTOs.Brand;
 using SportShoes2026.Service.DTOs.Size;
-using SportShoes2026.Service.DTOs.Sport;
 using SportShoes2026.Service.Interfaces;
 using SportShoes2026.Windows.Helpers;
 using System.ComponentModel;
@@ -11,7 +12,14 @@ namespace SportShoes2026.Windows
     {
         private readonly IServiceProvider _serviceProvider;
         private List<SizeListDto>? _listSizes;
-        private bool filtroActivo = false;
+        private bool? filtroActivo = null;
+        private int _paginaActual = 1;
+        private int _totalRegistros = 0;
+        private int _totalPaginas = 0;
+        private int _cantidadPorPagina = 10;
+
+        private string campoOrdenar = "Nombre";
+        private bool esAscendente = true;
         private BindingSource _bindingSource = new BindingSource();
         public frmSize(IServiceProvider serviceProvider)
         {
@@ -33,18 +41,20 @@ namespace SportShoes2026.Windows
         {
             using (var scope = _serviceProvider.CreateScope())
             {
-                var Sizeservice = scope.ServiceProvider.GetRequiredService<ISizeService>();
+                var sizeServicio = scope.ServiceProvider
+                    .GetRequiredService<ISizeService>();
                 try
                 {
-                    var resultadoConsulta = Sizeservice.GetAll();
+                    var resultadoConsulta = sizeServicio
+                        .ObtenerPagina(_paginaActual, _cantidadPorPagina,
+                        campoOrdenar, esAscendente, filtroActivo);
                     if (resultadoConsulta.IsFailure)
                     {
-                        string errores = string.Join("\n", resultadoConsulta.Errors);
-                        MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ErrorHelper.MostrarErrores(resultadoConsulta.Errors);
                         return;
                     }
-                    _listSizes = resultadoConsulta.Value;
-                    MostrarDatosEnGrillas(_listSizes);
+
+                    MostrarDatosEnGrilla(resultadoConsulta.Value!);
                 }
                 catch (Exception ex)
                 {
@@ -54,44 +64,38 @@ namespace SportShoes2026.Windows
             }
         }
 
-        private void MostrarDatosEnGrillas(List<SizeListDto>? listSizes)
+        private void MostrarDatosEnGrilla(PaginationResultDto<SizeListDto> resultado)
         {
-            
-            if (listSizes is null || listSizes.Count == 0)
-            {
-                return;
-            }
-            var bindingList = new BindingList<SizeListDto>(listSizes);
-            _bindingSource.DataSource = bindingList;
+            if (resultado.Items is null ||
+                resultado.Items.Count == 0) return;
+
+            _totalPaginas = resultado.TotalPaginas;
+            _totalRegistros = resultado.CantidadRegistros;
+
+            _bindingSource.DataSource = resultado.Items;
             dgvDatos.DataSource = _bindingSource;
-            lblCantidad.Text = listSizes.Count.ToString();
+
+            int desde = 1 + (_paginaActual - 1) * _cantidadPorPagina;
+            int hasta = desde + _cantidadPorPagina - 1;
+            if (hasta > _totalRegistros)
+            {
+                hasta = _totalRegistros;
+            }
+            lblCantidad.Text = $"Del {desde} a {hasta} de {_totalRegistros}";
+            lblCantidadPaginas.Text = $"{_paginaActual} de {_totalPaginas}";
+
+            btnPrimero.Enabled = resultado.TieneRegistrosAnteriores;
+            btnAnterior.Enabled = resultado.TieneRegistrosAnteriores;
+            btnSiguiente.Enabled = resultado.TieneRegistrosSiguientes;
+            btnUltimo.Enabled = resultado.TieneRegistrosSiguientes;
         }
 
         private void activeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var Sizeservice = scope.ServiceProvider.GetRequiredService<ISizeService>();
-                try
-                {
-                    var resultadoConsulta = Sizeservice.FilterByAsset(true);
-                    if (resultadoConsulta.IsFailure)
-                    {
-                        string errores = string.Join("\n", resultadoConsulta.Errors);
-                        MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    _listSizes = resultadoConsulta.Value;
-                    MostrarDatosEnGrillas(_listSizes);
-                    ManejarControles(true);
-                }
-                catch (Exception ex)
-                {
-
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-            }
+            filtroActivo = true;
+            _paginaActual = 1;
+            tsbFilter.BackColor = Color.Orange;
+            RecargarGrilla();
         }
 
         private void ManejarControles(bool v)
@@ -103,37 +107,21 @@ namespace SportShoes2026.Windows
 
         private void noActiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var Sizeservice = scope.ServiceProvider.GetRequiredService<ISizeService>();
-                try
-                {
-                    var resultadoConsulta = Sizeservice.FilterByAsset(false);
-                    if (resultadoConsulta.IsFailure)
-                    {
-                        string errores = string.Join("\n", resultadoConsulta.Errors);
-                        MessageBox.Show(errores, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    _listSizes = resultadoConsulta.Value;
-                    MostrarDatosEnGrillas(_listSizes);
-                    ManejarControles(true);
-                }
-                catch (Exception ex)
-                {
-
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            filtroActivo = false;
+            _paginaActual = 1;
+            tsbFilter.BackColor = Color.Orange;
+            RecargarGrilla();
         }
 
         private void tsbUpdate_Click(object sender, EventArgs e)
         {
+            filtroActivo = null;
+            _paginaActual = 1;
+            tsbFilter.BackColor = SystemColors.Control;
             RecargarGrilla();
-            ManejarControles(false);
         }
 
-     
+
 
         private void tsbNew_Click(object sender, EventArgs e)
         {
@@ -145,9 +133,37 @@ namespace SportShoes2026.Windows
                     frm.ShowDialog();
                     if (frm.DataChanged)
                     {
+                        var nuevoId = frm.UltimoId;
+                        bool sePuedeVer = filtroActivo is null || filtroActivo == true;
+                        if (sePuedeVer)
+                        {
+                            var tipoServicio = scope.ServiceProvider
+                                .GetRequiredService<ISizeService>();
+                            var resultado = tipoServicio.ObtenerPaginaRegistro(nuevoId, _cantidadPorPagina);
+                            if (resultado.IsFailure)
+                            {
+                                ErrorHelper.MostrarErrores(resultado.Errors);
+                                return;
+                            }
+                            _paginaActual = resultado.Value;
+                        }
                         RecargarGrilla();
-                    }
+                        if (sePuedeVer)
+                        {
+                            var nuevoTipo = _bindingSource.List
+                                .Cast<SizeListDto>()
+                                .FirstOrDefault(tp => tp.SizeId == nuevoId);
+                            if (nuevoTipo is null) return;
+                            _bindingSource.Position = _bindingSource.IndexOf(nuevoTipo);
 
+                        }
+                        else
+                        {
+                            MessageBox.Show("Los registros agregados no se pueden mostrar\npor condición de filtro o búsqueda",
+                                "Advertencia",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
                 }
             }
         }
@@ -156,30 +172,50 @@ namespace SportShoes2026.Windows
         {
             if (_bindingSource.Current == null)
             {
-                MessageBox.Show("You must select a row from the grid.",
-                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Debe seleccionar una fila de la grilla",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            SizeListDto sizeListDto = (SizeListDto)_bindingSource.Current;
+            var sizeListDto = (SizeListDto)_bindingSource.Current;
+            var seleccionadoId = sizeListDto.SizeId;
             using (var scope = _serviceProvider.CreateScope())
             {
                 try
                 {
-                    var SizeServicio = scope.ServiceProvider
-                     .GetRequiredService<ISizeService>();
-                    var resultadoConsulta = SizeServicio
+                    var sizeServicio = scope.ServiceProvider
+                .GetRequiredService<ISizeService>();
+                    var resultadoConsulta = sizeServicio
                         .GetForUpdate(sizeListDto.SizeId);
                     if (resultadoConsulta.IsFailure)
                     {
                         ErrorHelper.MostrarErrores(resultadoConsulta.Errors);
                         return;
                     }
-                    var sizeEditDto = resultadoConsulta.Value;
-                    using (frmSizeAe frm = scope.ServiceProvider.GetRequiredService<frmSizeAe>())
+                    var sizeUpdateDto = resultadoConsulta.Value;
+                    using (frmSizeAe frm = scope.ServiceProvider
+                        .GetRequiredService<frmSizeAe>())
                     {
-                        frm.Text = "Editar Tipo de Bombón";
-                        frm.SetTipo(sizeEditDto);
+                        frm.Text = "Editar Talla";
+                        frm.SetSize(sizeUpdateDto);
                         frm.ShowDialog();
+                        var sizeEditado = frm.GetSize();
+                        if (sizeEditado is null) return;
+                        bool sePuedeVer = filtroActivo is null ||
+                            filtroActivo == sizeEditado.IsActive;
+
+                        if (sePuedeVer)
+                        {
+                            var resultadoPagina = sizeServicio
+                                .ObtenerPaginaRegistro(seleccionadoId, _cantidadPorPagina,
+                                filtroActivo);
+                            if (resultadoConsulta.IsFailure)
+                            {
+                                ErrorHelper.MostrarErrores(resultadoPagina.Errors);
+                                return;
+                            }
+                            _paginaActual = resultadoPagina.Value;
+                        }
+
                         if (frm.ConcurrencyConflict)
                         {
                             RecargarGrilla();
@@ -188,7 +224,22 @@ namespace SportShoes2026.Windows
                         {
                             RecargarGrilla();
                         }
+                        if (sePuedeVer)
+                        {
+                            var registroEditado = _bindingSource.List
+                                .Cast<SizeListDto>()
+                                .FirstOrDefault(b => b.SizeId == seleccionadoId);
+                            if (registroEditado is null) return;
+                            _bindingSource.Position = _bindingSource.IndexOf(registroEditado);
 
+                        }
+                        else
+                        {
+                            MessageBox.Show("El registro editado no se puede mostrar\npor condición de filtro o búsqueda",
+                                "Advertencia",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        }
                     }
 
                 }
@@ -252,6 +303,38 @@ namespace SportShoes2026.Windows
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void btnPrimero_Click(object sender, EventArgs e)
+        {
+            _paginaActual = 1;
+            RecargarGrilla();
+        }
+
+        private void btnAnterior_Click(object sender, EventArgs e)
+        {
+            _paginaActual--;
+            if (_paginaActual == 0)
+            {
+                _paginaActual = 1;
+            }
+            RecargarGrilla();
+        }
+
+        private void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            _paginaActual++;
+            if (_paginaActual > _totalPaginas)
+            {
+                _paginaActual = _totalPaginas;
+            }
+            RecargarGrilla();
+        }
+
+        private void btnUltimo_Click(object sender, EventArgs e)
+        {
+            _paginaActual = _totalPaginas;
+            RecargarGrilla();
         }
     }
 }

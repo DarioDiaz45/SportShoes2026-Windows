@@ -42,6 +42,12 @@
             toolStripSeparator2 = new ToolStripSeparator();
             tsbClose = new ToolStripButton();
             pnlCantidad = new Panel();
+            btnPrimero = new Button();
+            btnAnterior = new Button();
+            btnSiguiente = new Button();
+            btnUltimo = new Button();
+            lblCantidadPaginas = new Label();
+            label2 = new Label();
             lblCantidad = new Label();
             label1 = new Label();
             dgvDatos = new DataGridView();
@@ -65,6 +71,7 @@
             // 
             // toolStrip1
             // 
+            toolStrip1.BackColor = SystemColors.ControlDark;
             toolStrip1.Items.AddRange(new ToolStripItem[] { tsbNew, tsbDelete, tsbEdit, toolStripSeparator1, tsbFilter, tsbUpdate, toolStripSeparator2, tsbClose });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
@@ -164,18 +171,88 @@
             // 
             // pnlCantidad
             // 
+            pnlCantidad.BackColor = SystemColors.ControlDark;
+            pnlCantidad.Controls.Add(btnPrimero);
+            pnlCantidad.Controls.Add(btnAnterior);
+            pnlCantidad.Controls.Add(btnSiguiente);
+            pnlCantidad.Controls.Add(btnUltimo);
+            pnlCantidad.Controls.Add(lblCantidadPaginas);
+            pnlCantidad.Controls.Add(label2);
             pnlCantidad.Controls.Add(lblCantidad);
             pnlCantidad.Controls.Add(label1);
             pnlCantidad.Dock = DockStyle.Bottom;
-            pnlCantidad.Location = new Point(0, 424);
+            pnlCantidad.Location = new Point(0, 397);
             pnlCantidad.Name = "pnlCantidad";
-            pnlCantidad.Size = new Size(800, 36);
+            pnlCantidad.Size = new Size(800, 63);
             pnlCantidad.TabIndex = 1;
+            // 
+            // btnPrimero
+            // 
+            btnPrimero.BackColor = SystemColors.ControlDark;
+            btnPrimero.Image = (Image)resources.GetObject("btnPrimero.Image");
+            btnPrimero.Location = new Point(566, 21);
+            btnPrimero.Name = "btnPrimero";
+            btnPrimero.Size = new Size(38, 32);
+            btnPrimero.TabIndex = 11;
+            btnPrimero.UseVisualStyleBackColor = false;
+            btnPrimero.Click += btnPrimero_Click;
+            // 
+            // btnAnterior
+            // 
+            btnAnterior.BackColor = SystemColors.ControlDark;
+            btnAnterior.Image = (Image)resources.GetObject("btnAnterior.Image");
+            btnAnterior.ImageAlign = ContentAlignment.BottomCenter;
+            btnAnterior.Location = new Point(610, 21);
+            btnAnterior.Name = "btnAnterior";
+            btnAnterior.Size = new Size(38, 32);
+            btnAnterior.TabIndex = 10;
+            btnAnterior.UseVisualStyleBackColor = false;
+            btnAnterior.Click += btnAnterior_Click;
+            // 
+            // btnSiguiente
+            // 
+            btnSiguiente.BackColor = SystemColors.ControlDark;
+            btnSiguiente.Image = Properties.Resources.Right_Button;
+            btnSiguiente.Location = new Point(657, 21);
+            btnSiguiente.Name = "btnSiguiente";
+            btnSiguiente.Size = new Size(38, 33);
+            btnSiguiente.TabIndex = 9;
+            btnSiguiente.UseVisualStyleBackColor = false;
+            btnSiguiente.Click += btnSiguiente_Click;
+            // 
+            // btnUltimo
+            // 
+            btnUltimo.BackColor = SystemColors.ControlDark;
+            btnUltimo.Image = (Image)resources.GetObject("btnUltimo.Image");
+            btnUltimo.Location = new Point(707, 21);
+            btnUltimo.Name = "btnUltimo";
+            btnUltimo.Size = new Size(38, 33);
+            btnUltimo.TabIndex = 8;
+            btnUltimo.UseVisualStyleBackColor = false;
+            btnUltimo.Click += btnUltimo_Click;
+            // 
+            // lblCantidadPaginas
+            // 
+            lblCantidadPaginas.AutoSize = true;
+            lblCantidadPaginas.Location = new Point(134, 39);
+            lblCantidadPaginas.Name = "lblCantidadPaginas";
+            lblCantidadPaginas.Size = new Size(13, 15);
+            lblCantidadPaginas.TabIndex = 3;
+            lblCantidadPaginas.Text = "0";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 39);
+            label2.Name = "label2";
+            label2.Size = new Size(118, 15);
+            label2.TabIndex = 2;
+            label2.Text = "Cantidad de Paginas:";
             // 
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.Location = new Point(73, 12);
+            lblCantidad.Location = new Point(134, 12);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(13, 15);
             lblCantidad.TabIndex = 1;
@@ -186,14 +263,15 @@
             label1.AutoSize = true;
             label1.Location = new Point(12, 12);
             label1.Name = "label1";
-            label1.Size = new Size(58, 15);
+            label1.Size = new Size(125, 15);
             label1.TabIndex = 0;
-            label1.Text = "Cantidad:";
+            label1.Text = "Cantidad de Registros:";
             // 
             // dgvDatos
             // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
+            dgvDatos.BackgroundColor = SystemColors.ControlDarkDark;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colIdSize, colNumber, colActive });
             dgvDatos.Dock = DockStyle.Fill;
@@ -201,7 +279,7 @@
             dgvDatos.Name = "dgvDatos";
             dgvDatos.ReadOnly = true;
             dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDatos.Size = new Size(800, 347);
+            dgvDatos.Size = new Size(800, 320);
             dgvDatos.TabIndex = 2;
             // 
             // colIdSize
@@ -269,5 +347,11 @@
         private DataGridViewTextBoxColumn colIdSize;
         private DataGridViewTextBoxColumn colNumber;
         private DataGridViewCheckBoxColumn colActive;
+        private Label lblCantidadPaginas;
+        private Label label2;
+        private Button btnPrimero;
+        private Button btnAnterior;
+        private Button btnSiguiente;
+        private Button btnUltimo;
     }
 }

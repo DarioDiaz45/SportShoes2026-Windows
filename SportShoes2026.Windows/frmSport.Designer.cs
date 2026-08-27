@@ -42,6 +42,12 @@
             toolStripSeparator2 = new ToolStripSeparator();
             tsbClose = new ToolStripButton();
             pnlCantidad = new Panel();
+            btnPrimero = new Button();
+            btnAnterior = new Button();
+            btnSiguiente = new Button();
+            btnUltimo = new Button();
+            lblPaginas = new Label();
+            label2 = new Label();
             label1 = new Label();
             lblCantidad = new Label();
             pnlGrilla = new Panel();
@@ -67,6 +73,7 @@
             // 
             // toolStrip1
             // 
+            toolStrip1.BackColor = SystemColors.ControlDark;
             toolStrip1.Items.AddRange(new ToolStripItem[] { tsbNew, tsbDelete, tsbEdit, toolStripSeparator1, tsbFilter, tsbUpdate, toolStripSeparator2, tsbClose });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
@@ -166,6 +173,13 @@
             // 
             // pnlCantidad
             // 
+            pnlCantidad.BackColor = SystemColors.ControlDark;
+            pnlCantidad.Controls.Add(btnPrimero);
+            pnlCantidad.Controls.Add(btnAnterior);
+            pnlCantidad.Controls.Add(btnSiguiente);
+            pnlCantidad.Controls.Add(btnUltimo);
+            pnlCantidad.Controls.Add(lblPaginas);
+            pnlCantidad.Controls.Add(label2);
             pnlCantidad.Controls.Add(label1);
             pnlCantidad.Controls.Add(lblCantidad);
             pnlCantidad.Dock = DockStyle.Bottom;
@@ -174,19 +188,82 @@
             pnlCantidad.Size = new Size(800, 45);
             pnlCantidad.TabIndex = 1;
             // 
+            // btnPrimero
+            // 
+            btnPrimero.BackColor = SystemColors.ControlDark;
+            btnPrimero.Image = (Image)resources.GetObject("btnPrimero.Image");
+            btnPrimero.Location = new Point(522, 10);
+            btnPrimero.Name = "btnPrimero";
+            btnPrimero.Size = new Size(44, 32);
+            btnPrimero.TabIndex = 11;
+            btnPrimero.UseVisualStyleBackColor = false;
+            btnPrimero.Click += btnPrimero_Click;
+            // 
+            // btnAnterior
+            // 
+            btnAnterior.BackColor = SystemColors.ButtonShadow;
+            btnAnterior.Image = (Image)resources.GetObject("btnAnterior.Image");
+            btnAnterior.ImageAlign = ContentAlignment.BottomCenter;
+            btnAnterior.Location = new Point(563, 10);
+            btnAnterior.Name = "btnAnterior";
+            btnAnterior.Size = new Size(44, 32);
+            btnAnterior.TabIndex = 10;
+            btnAnterior.UseVisualStyleBackColor = false;
+            btnAnterior.Click += btnAnterior_Click;
+            // 
+            // btnSiguiente
+            // 
+            btnSiguiente.BackColor = SystemColors.ControlDark;
+            btnSiguiente.Image = Properties.Resources.Right_Button;
+            btnSiguiente.Location = new Point(613, 10);
+            btnSiguiente.Name = "btnSiguiente";
+            btnSiguiente.Size = new Size(44, 33);
+            btnSiguiente.TabIndex = 9;
+            btnSiguiente.UseVisualStyleBackColor = false;
+            btnSiguiente.Click += btnSiguiente_Click;
+            // 
+            // btnUltimo
+            // 
+            btnUltimo.BackColor = SystemColors.ControlDark;
+            btnUltimo.Image = (Image)resources.GetObject("btnUltimo.Image");
+            btnUltimo.Location = new Point(663, 10);
+            btnUltimo.Name = "btnUltimo";
+            btnUltimo.Size = new Size(44, 33);
+            btnUltimo.TabIndex = 8;
+            btnUltimo.UseVisualStyleBackColor = false;
+            btnUltimo.Click += btnUltimo_Click;
+            // 
+            // lblPaginas
+            // 
+            lblPaginas.AutoSize = true;
+            lblPaginas.Location = new Point(143, 28);
+            lblPaginas.Name = "lblPaginas";
+            lblPaginas.Size = new Size(13, 15);
+            lblPaginas.TabIndex = 3;
+            lblPaginas.Text = "0";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(14, 28);
+            label2.Name = "label2";
+            label2.Size = new Size(118, 15);
+            label2.TabIndex = 2;
+            label2.Text = "Cantidad de Paginas:";
+            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 21);
+            label1.Location = new Point(12, 12);
             label1.Name = "label1";
-            label1.Size = new Size(58, 15);
+            label1.Size = new Size(125, 15);
             label1.TabIndex = 1;
-            label1.Text = "Cantidad:";
+            label1.Text = "Cantidad de Registros:";
             // 
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.Location = new Point(69, 21);
+            lblCantidad.Location = new Point(143, 12);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(13, 15);
             lblCantidad.TabIndex = 0;
@@ -205,7 +282,7 @@
             // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
-            dgvDatos.BackgroundColor = SystemColors.GradientActiveCaption;
+            dgvDatos.BackgroundColor = SystemColors.ControlDarkDark;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colIdSport, colSportName, colActive });
             dgvDatos.Dock = DockStyle.Fill;
@@ -283,5 +360,11 @@
         private DataGridViewTextBoxColumn colIdSport;
         private DataGridViewTextBoxColumn colSportName;
         private DataGridViewCheckBoxColumn colActive;
+        private Label label2;
+        private Label lblPaginas;
+        private Button btnPrimero;
+        private Button btnAnterior;
+        private Button btnSiguiente;
+        private Button btnUltimo;
     }
 }

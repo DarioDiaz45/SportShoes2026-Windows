@@ -10,7 +10,7 @@ namespace SportShoes2026.Windows
     public partial class frmBrand : Form
     {
         private readonly IServiceProvider _serviceProvider;
-        
+
         private bool? filtroActivo = null;
         private BindingSource _bindingSource = new BindingSource();
         private int _paginaActual = 1;
@@ -155,15 +155,7 @@ namespace SportShoes2026.Windows
             RecargarGrilla();
         }
 
-        private void ManejarControles(bool v)
-        {
-            filtroActivo = v;
-            tsbFilter.BackColor = v ? Color.Orange : SystemColors.Control;
-
-            tsbNew.Enabled = !v;
-            tsbDelete.Enabled = !v;
-            tsbEdit.Enabled = !v;
-        }
+      
 
         private void noActiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -175,9 +167,12 @@ namespace SportShoes2026.Windows
 
         private void tsbUpdate_Click(object sender, EventArgs e)
         {
+            filtroActivo = null;
+            _paginaActual = 1;
+            tsbFilter.BackColor = SystemColors.Control;
             RecargarGrilla();
-            ManejarControles(false);
         }
+        
 
         private void tsbNew_Click(object sender, EventArgs e)
         {

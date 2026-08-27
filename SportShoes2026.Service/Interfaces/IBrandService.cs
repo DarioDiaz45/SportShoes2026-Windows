@@ -6,8 +6,6 @@ namespace SportShoes2026.Service.Interfaces
     public interface IBrandService
     {
 
-
-
         Result<List<BrandListDto>> GetAll();
 
         Result<int> Add(BrandCreateDto dto);
